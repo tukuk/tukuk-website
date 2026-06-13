@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tukuk - Website Rasmi</title>
+  <meta name="description" content="Website rasmi Tukuk untuk kerja, projek, dan komunikasi.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-strong: rgba(15, 23, 42, 0.94);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --border: rgba(148, 163, 184, 0.22);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.22), transparent 28%),
+        radial-gradient(circle at 85% 0%, rgba(34, 197, 94, 0.16), transparent 26%),
+        linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(16px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.2rem;
+    }
+
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #020617;
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 36px;
+      align-items: center;
+      padding: 88px 0 56px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #bae6fd;
+      font-size: 0.9rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.14);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(2.6rem, 8vw, 6.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.08em;
+    }
+
+    .gradient {
+      background: linear-gradient(135deg, #e0f2fe, #7dd3fc 38%, #86efac);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.72);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #020617;
+      box-shadow: 0 18px 40px rgba(14, 165, 233, 0.22);
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.25), transparent 34%);
+      pointer-events: none;
+    }
+
+    .terminal {
+      position: relative;
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 18px;
+      background: #020617;
+    }
+
+    .bar {
+      display: flex;
+      gap: 7px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .bar span {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: #f87171;
+    }
+
+    .bar span:nth-child(2) {
+      background: #facc15;
+    }
+
+    .bar span:nth-child(3) {
+      background: #4ade80;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      overflow: auto;
+      color: #bae6fd;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    section {
+      padding: 44px 0;
+    }
+
+    .section-title {
+      margin-bottom: 22px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--panel-strong);
+      box-shadow: var(--shadow);
+    }
+
+    .panel h3 {
+      margin: 0 0 12px;
+      font-size: 1.3rem;
+    }
+
+    .panel p,
+    .panel li {
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    code {
+      padding: 0.18em 0.35em;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.12);
+      color: #bae6fd;
+    }
+
+    footer {
+      padding: 40px 0 56px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .split,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 0;
+      }
+
+      .links {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="page">
+      <a class="brand" href="#">
+        <span class="logo">T</span>
+        <span>Tukuk</span>
+      </a>
+      <div class="links">
+        <a href="#services">Servis</a>
+        <a href="#mail">Work Mail</a>
+        <a href="#setup">Setup</a>
+        <a href="#contact">Kontak</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> Website percuma, sentiasa hidup</span>
+        <h1>Website rasmi untuk <span class="gradient">Tukuk</span></h1>
+        <p class="lead">
+          Laman web statik yang boleh di-host secara percuma menggunakan GitHub Pages, Cloudflare Pages,
+          atau Netlify. Selepas deploy, ia hidup 24/7 tanpa perlu membuka laptop.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="mailto:admin@tukuk.duckdns.org">Hubungi admin</a>
+          <a class="button" href="#setup">Lihat cara deploy</a>
+        </div>
+      </div>
+
+      <div class="card" aria-label="Server status">
+        <strong>Status hosting</strong>
+        <p>Sentiasa hidup di platform hosting percuma.</p>
+        <div class="terminal">
+          <div class="bar"><span></span><span></span><span></span></div>
+          <pre><code>Hosting: Cloudflare Pages / GitHub Pages
+Domain : tukuk.duckdns.org
+Mail   : admin@tukuk.duckdns.org
+Status : online 24/7
+Laptop : tidak perlu dibuka</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2 class="section-title">Apa yang boleh ada di website ini?</h2>
+      <div class="grid">
+        <article class="feature">
+          <strong>Profil / Portfolio</strong>
+          <p>Paparkan identiti, servis, projek, dan maklumat penting tentang Tukuk.</p>
+        </article>
+        <article class="feature">
+          <strong>Halaman Projek</strong>
+          <p>Tunjukkan senarai projek, dokumentasi, screenshot, dan pautan muat turun.</p>
+        </article>
+        <article class="feature">
+          <strong>Hubungi</strong>
+          <p>Gunakan email kerja seperti admin, support, work, dan sales pada domain sendiri.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="mail" class="split">
+      <div class="panel">
+        <h3>Work Mail percuma</h3>
+        <p>
+          Gunakan Cloudflare Email Routing supaya semua email yang masuk ke domain diteruskan
+          ke Gmail atau Outlook anda.
+        </p>
+        <ul>
+          <li><code>admin@tukuk.duckdns.org</code></li>
+          <li><code>support@tukuk.duckdns.org</code></li>
+          <li><code>work@tukuk.duckdns.org</code></li>
+          <li><code>sales@tukuk.duckdns.org</code></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Kenapa bukan server sendiri?</h3>
+        <p>
+          Server mail sendiri memerlukan port 25, IP tetap, DNS yang betul, dan laptop/server yang
+          sentiasa online. Hosting percuma lebih stabil untuk website dan email routing.
+        </p>
+      </div>
+    </section>
+
+    <section id="setup">
+      <h2 class="section-title">Cara deploy supaya hidup 24/7</h2>
+      <div class="grid">
+        <article class="feature">
+          <strong>1. GitHub Pages</strong>
+          <p>Upload fail website ke GitHub, aktifkan Pages, dan sambungkan domain.</p>
+        </article>
+        <article class="feature">
+          <strong>2. Cloudflare Pages</strong>
+          <p>Sambung repo GitHub ke Cloudflare Pages, pilih branch utama, dan aktifkan custom domain.</p>
+        </article>
+        <article class="feature">
+          <strong>3. Netlify</strong>
+          <p>Sambung GitHub atau upload fail secara manual, kemudian tambah domain custom.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="panel">
+        <h3>Kontak</h3>
+        <p>
+          Email kerja utama:
+          <a href="mailto:admin@tukuk.duckdns.org">admin@tukuk.duckdns.org</a>
+        </p>
+        <p>
+          Domain:
+          <code>tukuk.duckdns.org</code>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page">
+    © 2026 Tukuk. Hosted free and online 24/7.
+  </footer>
+</body>
+</html>
