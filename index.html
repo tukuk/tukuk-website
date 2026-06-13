@@ -3,58 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tukuk - Website Rasmi</title>
-  <meta name="description" content="Website rasmi Tukuk untuk kerja, projek, dan komunikasi.">
+  <title>Tukuk - Dashboard Rasmi</title>
+  <meta name="description" content="Dashboard rasmi Tukuk untuk website, subdomain, work mail, dan status infrastruktur.">
   <style>
     :root {
       color-scheme: dark;
       --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.78);
-      --panel-strong: rgba(15, 23, 42, 0.94);
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-strong: rgba(15, 23, 42, 0.96);
       --text: #e5e7eb;
       --muted: #94a3b8;
       --accent: #38bdf8;
-      --accent-2: #22c55e;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #fb7185;
       --border: rgba(148, 163, 184, 0.22);
       --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.22), transparent 28%),
-        radial-gradient(circle at 85% 0%, rgba(34, 197, 94, 0.16), transparent 26%),
-        linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.20), transparent 28%),
+        radial-gradient(circle at 88% 0%, rgba(34, 197, 94, 0.14), transparent 24%),
+        linear-gradient(135deg, #020617 0%, #0f172a 48%, #111827 100%);
       color: var(--text);
       line-height: 1.65;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
-    .page {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-    }
+    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 10;
       border-bottom: 1px solid var(--border);
-      background: rgba(2, 6, 23, 0.72);
+      background: rgba(2, 6, 23, 0.76);
       backdrop-filter: blur(16px);
     }
 
@@ -70,51 +62,42 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 1.25rem;
     }
 
     .logo {
       display: grid;
       place-items: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--green));
       color: #020617;
-      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
+      box-shadow: 0 12px 34px rgba(56, 189, 248, 0.24);
     }
 
-    .links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .links a:hover {
-      color: var(--text);
-    }
+    .links { display: flex; flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: 0.95rem; }
+    .links a:hover { color: var(--text); }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
-      gap: 36px;
-      align-items: center;
-      padding: 88px 0 56px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+      gap: 34px;
+      align-items: stretch;
+      padding: 84px 0 52px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
       margin-bottom: 18px;
       padding: 7px 12px;
       border: 1px solid var(--border);
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.72);
       color: #bae6fd;
       font-size: 0.9rem;
     }
@@ -123,14 +106,14 @@
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: var(--accent-2);
+      background: var(--green);
       box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.14);
     }
 
     h1 {
       margin: 0;
-      max-width: 760px;
-      font-size: clamp(2.6rem, 8vw, 6.8rem);
+      max-width: 780px;
+      font-size: clamp(2.7rem, 8vw, 6.8rem);
       line-height: 0.95;
       letter-spacing: -0.08em;
     }
@@ -142,19 +125,9 @@
       color: transparent;
     }
 
-    .lead {
-      max-width: 680px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: clamp(1.05rem, 2vw, 1.28rem);
-    }
+    .lead { max-width: 700px; margin: 24px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 30px;
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
 
     .button {
       display: inline-flex;
@@ -166,7 +139,7 @@
       border: 1px solid var(--border);
       background: rgba(15, 23, 42, 0.72);
       color: var(--text);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .button.primary {
@@ -176,21 +149,23 @@
       box-shadow: 0 18px 40px rgba(14, 165, 233, 0.22);
     }
 
-    .card {
+    .card, .panel {
       position: relative;
       overflow: hidden;
       padding: 24px;
       border: 1px solid var(--border);
-      border-radius: 28px;
+      border-radius: 26px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
+
+    .panel { background: var(--panel-strong); }
 
     .card::before {
       content: "";
       position: absolute;
       inset: -1px;
-      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.25), transparent 34%);
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%);
       pointer-events: none;
     }
 
@@ -211,20 +186,9 @@
       background: rgba(15, 23, 42, 0.9);
     }
 
-    .bar span {
-      width: 11px;
-      height: 11px;
-      border-radius: 999px;
-      background: #f87171;
-    }
-
-    .bar span:nth-child(2) {
-      background: #facc15;
-    }
-
-    .bar span:nth-child(3) {
-      background: #4ade80;
-    }
+    .bar span { width: 11px; height: 11px; border-radius: 999px; background: #f87171; }
+    .bar span:nth-child(2) { background: #facc15; }
+    .bar span:nth-child(3) { background: #4ade80; }
 
     pre {
       margin: 0;
@@ -235,22 +199,16 @@
       line-height: 1.7;
     }
 
-    section {
-      padding: 44px 0;
-    }
+    section { padding: 42px 0; }
 
     .section-title {
       margin-bottom: 22px;
-      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-size: clamp(1.9rem, 4vw, 3rem);
       line-height: 1.05;
       letter-spacing: -0.05em;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 
     .feature {
       padding: 22px;
@@ -259,76 +217,63 @@
       background: var(--panel);
     }
 
-    .feature strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1.05rem;
-    }
+    .feature strong { display: block; margin-bottom: 8px; font-size: 1.05rem; }
+    .feature p { margin: 0; color: var(--muted); }
 
-    .feature p {
-      margin: 0;
-      color: var(--muted);
-    }
+    .split { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 22px; align-items: stretch; }
 
-    .split {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    .panel {
-      padding: 26px;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: var(--panel-strong);
-      box-shadow: var(--shadow);
-    }
-
-    .panel h3 {
-      margin: 0 0 12px;
-      font-size: 1.3rem;
-    }
-
-    .panel p,
-    .panel li {
-      color: var(--muted);
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 20px;
-    }
+    .panel h3 { margin: 0 0 12px; font-size: 1.3rem; }
+    .panel p, .panel li { color: var(--muted); }
+    ul { margin: 0; padding-left: 20px; }
 
     code {
-      padding: 0.18em 0.35em;
+      padding: 0.18em 0.38em;
       border-radius: 8px;
       background: rgba(56, 189, 248, 0.12);
       color: #bae6fd;
+      word-break: break-all;
     }
 
-    footer {
-      padding: 40px 0 56px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
+    .status {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    @media (max-width: 860px) {
-      .hero,
-      .split,
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    .status-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.62);
+    }
 
-      nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 18px 0;
-      }
+    .status-row strong { display: block; }
+    .status-row span { color: var(--muted); font-size: 0.92rem; }
 
-      .links {
-        flex-wrap: wrap;
-      }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .ok { color: #bbf7d0; background: rgba(34, 197, 94, 0.14); border: 1px solid rgba(34, 197, 94, 0.35); }
+    .warn { color: #fef08a; background: rgba(250, 204, 21, 0.13); border: 1px solid rgba(250, 204, 21, 0.35); }
+    .bad { color: #fecdd3; background: rgba(251, 113, 133, 0.14); border: 1px solid rgba(251, 113, 133, 0.35); }
+
+    footer { padding: 38px 0 56px; color: var(--muted); border-top: 1px solid var(--border); }
+
+    @media (max-width: 880px) {
+      .hero, .split, .grid { grid-template-columns: 1fr; }
+      nav { align-items: flex-start; flex-direction: column; padding: 18px 0; }
+      .links { gap: 12px; }
     }
   </style>
 </head>
@@ -340,10 +285,11 @@
         <span>Tukuk</span>
       </a>
       <div class="links">
-        <a href="#services">Servis</a>
+        <a href="#status">Status</a>
+        <a href="#website">Website</a>
         <a href="#mail">Work Mail</a>
-        <a href="#setup">Setup</a>
-        <a href="#contact">Kontak</a>
+        <a href="#dns">DNS</a>
+        <a href="#todo">Yang Perlu Setup</a>
       </div>
     </nav>
   </header>
@@ -351,108 +297,171 @@
   <main class="page">
     <section class="hero">
       <div>
-        <span class="eyebrow"><span class="dot"></span> Website percuma, sentiasa hidup</span>
-        <h1>Website rasmi untuk <span class="gradient">Tukuk</span></h1>
+        <span class="eyebrow"><span class="dot"></span> Dashboard infrastruktur percuma</span>
+        <h1>Website dan work mail untuk <span class="gradient">Tukuk</span></h1>
         <p class="lead">
-          Laman web statik yang boleh di-host secara percuma menggunakan GitHub Pages, Cloudflare Pages,
-          atau Netlify. Selepas deploy, ia hidup 24/7 tanpa perlu membuka laptop.
+          Dashboard ini menyimpan status sebenar domain, website, subdomain, work mail, DNS,
+          dan perkara yang masih perlu disiapkan.
         </p>
         <div class="actions">
-          <a class="button primary" href="mailto:admin@tukuk.duckdns.org">Hubungi admin</a>
-          <a class="button" href="#setup">Lihat cara deploy</a>
+          <a class="button primary" href="mailto:admin@tukuk.duckdns.org">Email admin</a>
+          <a class="button" href="#todo">Lihat checklist</a>
         </div>
       </div>
 
-      <div class="card" aria-label="Server status">
-        <strong>Status hosting</strong>
-        <p>Sentiasa hidup di platform hosting percuma.</p>
+      <div class="card">
+        <strong>Status ringkas</strong>
         <div class="terminal">
           <div class="bar"><span></span><span></span><span></span></div>
-          <pre><code>Hosting: Cloudflare Pages / GitHub Pages
-Domain : tukuk.duckdns.org
-Mail   : admin@tukuk.duckdns.org
-Status : online 24/7
-Laptop : tidak perlu dibuka</code></pre>
+          <pre><code>Domain : tukuk.duckdns.org
+IP     : 103.186.160.191
+Site   : GitHub Pages built
+Mail   : pending Cloudflare setup
+MX     : not ready
+SPF    : empty</code></pre>
         </div>
       </div>
     </section>
 
-    <section id="services">
-      <h2 class="section-title">Apa yang boleh ada di website ini?</h2>
+    <section id="status">
+      <h2 class="section-title">Status infrastruktur</h2>
       <div class="grid">
         <article class="feature">
-          <strong>Profil / Portfolio</strong>
-          <p>Paparkan identiti, servis, projek, dan maklumat penting tentang Tukuk.</p>
+          <strong><span class="badge ok">OK</span> DuckDNS</strong>
+          <p><code>tukuk.duckdns.org</code> sudah mengarah ke <code>103.186.160.191</code>.</p>
         </article>
         <article class="feature">
-          <strong>Halaman Projek</strong>
-          <p>Tunjukkan senarai projek, dokumentasi, screenshot, dan pautan muat turun.</p>
+          <strong><span class="badge ok">OK</span> Website</strong>
+          <p>GitHub Pages aktif di <code>https://tukuk.github.io/tukuk-website/</code>.</p>
         </article>
         <article class="feature">
-          <strong>Hubungi</strong>
-          <p>Gunakan email kerja seperti admin, support, work, dan sales pada domain sendiri.</p>
+          <strong><span class="badge warn">Pending</span> Work Mail</strong>
+          <p>Perlu aktifkan Cloudflare Email Routing dan verify email destinasi.</p>
         </article>
       </div>
     </section>
 
-    <section id="mail" class="split">
+    <section id="website" class="split">
       <div class="panel">
-        <h3>Work Mail percuma</h3>
+        <h3>Website</h3>
         <p>
-          Gunakan Cloudflare Email Routing supaya semua email yang masuk ke domain diteruskan
-          ke Gmail atau Outlook anda.
+          Website statik sudah dibuat dan deploy ke GitHub Pages. Ia sentiasa hidup 24/7
+          tanpa perlu buka laptop.
         </p>
         <ul>
-          <li><code>admin@tukuk.duckdns.org</code></li>
-          <li><code>support@tukuk.duckdns.org</code></li>
-          <li><code>work@tukuk.duckdns.org</code></li>
-          <li><code>sales@tukuk.duckdns.org</code></li>
+          <li>Repo: <code>tukuk/tukuk-website</code></li>
+          <li>Pages: <code>https://tukuk.github.io/tukuk-website/</code></li>
+          <li>Status: <code>HTTP 200</code></li>
         </ul>
       </div>
       <div class="panel">
-        <h3>Kenapa bukan server sendiri?</h3>
-        <p>
-          Server mail sendiri memerlukan port 25, IP tetap, DNS yang betul, dan laptop/server yang
-          sentiasa online. Hosting percuma lebih stabil untuk website dan email routing.
-        </p>
+        <h3>Subdomain DNS</h3>
+        <p>Semua subdomain ini sudah DNS ke IP:</p>
+        <div class="status">
+          <div class="status-row"><div><strong><code>www.tukuk.duckdns.org</code></strong><span>Website alias</span></div><span class="badge ok">OK</span></div>
+          <div class="status-row"><div><strong><code>mail.tukuk.duckdns.org</code></strong><span>Work mail guide</span></div><span class="badge warn">DNS only</span></div>
+          <div class="status-row"><div><strong><code>app.tukuk.duckdns.org</code></strong><span>App masa depan</span></div><span class="badge warn">DNS only</span></div>
+          <div class="status-row"><div><strong><code>api.tukuk.duckdns.org</code></strong><span>API masa depan</span></div><span class="badge warn">DNS only</span></div>
+          <div class="status-row"><div><strong><code>status.tukuk.duckdns.org</code></strong><span>Status page</span></div><span class="badge warn">DNS only</span></div>
+        </div>
       </div>
     </section>
 
-    <section id="setup">
-      <h2 class="section-title">Cara deploy supaya hidup 24/7</h2>
+    <section id="mail">
+      <h2 class="section-title">Work Mail</h2>
+      <div class="split">
+        <div class="panel">
+          <h3>200 alamat email sudah disediakan</h3>
+          <p>
+            Senarai 200 alamat email sudah dibuat. Selepas Cloudflare setup, semua alamat
+            boleh forward ke Gmail/Outlook anda.
+          </p>
+          <ul>
+            <li><code>admin@tukuk.duckdns.org</code></li>
+            <li><code>support@tukuk.duckdns.org</code></li>
+            <li><code>work@tukuk.duckdns.org</code></li>
+            <li><code>sales@tukuk.duckdns.org</code></li>
+            <li><code>hello@tukuk.duckdns.org</code></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Password</h3>
+          <p>
+            Tiada password baru untuk email domain. Cloudflare hanya forward email ke destinasi
+            Gmail/Outlook anda.
+          </p>
+          <p>
+            Jika mahu reply/send dari email domain melalui Gmail, gunakan
+            <code>Gmail App Password</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="dns">
+      <h2 class="section-title">DNS semasa</h2>
+      <div class="panel">
+        <h3>Yang sudah betul</h3>
+        <pre><code>A @      103.186.160.191
+A www    103.186.160.191
+A mail   103.186.160.191
+A app    103.186.160.191
+A api    103.186.160.191
+A status 103.186.160.191</code></pre>
+
+        <h3>Yang belum sesuai untuk Cloudflare Email Routing</h3>
+        <pre><code>MX semasa: 50 tukuk.duckdns.org.
+TXT SPF: kosong</code></pre>
+
+        <h3>MX yang perlu</h3>
+        <pre><code>MX @ route1.mx.cloudflare.net
+MX @ route2.mx.cloudflare.net
+MX @ route3.mx.cloudflare.net
+TXT @ v=spf1 include:_spf.mx.cloudflare.net ~all</code></pre>
+      </div>
+    </section>
+
+    <section id="todo">
+      <h2 class="section-title">Checklist untuk siap penuh</h2>
       <div class="grid">
         <article class="feature">
-          <strong>1. GitHub Pages</strong>
-          <p>Upload fail website ke GitHub, aktifkan Pages, dan sambungkan domain.</p>
+          <strong>1. Cloudflare DNS</strong>
+          <p>Masukkan domain <code>tukuk.duckdns.org</code> ke Cloudflare dan guna nameserver Cloudflare.</p>
         </article>
         <article class="feature">
-          <strong>2. Cloudflare Pages</strong>
-          <p>Sambung repo GitHub ke Cloudflare Pages, pilih branch utama, dan aktifkan custom domain.</p>
+          <strong>2. Email Routing</strong>
+          <p>Aktifkan Email Routing dan verify destination email Gmail/Outlook anda.</p>
         </article>
         <article class="feature">
-          <strong>3. Netlify</strong>
-          <p>Sambung GitHub atau upload fail secara manual, kemudian tambah domain custom.</p>
+          <strong>3. Catch-all rule</strong>
+          <p>Buat rule: <code>* @ tukuk.duckdns.org → email-gmail-anda@gmail.com</code>.</p>
+        </article>
+        <article class="feature">
+          <strong>4. Gmail App Password</strong>
+          <p>Buat App Password untuk SMTP Gmail jika mahu reply/send sebagai email domain.</p>
+        </article>
+        <article class="feature">
+          <strong>5. Cloudflare Pages</strong>
+          <p>Untuk subdomain seperti <code>mail</code>, <code>app</code>, <code>api</code>, gunakan Cloudflare Pages.</p>
+        </article>
+        <article class="feature">
+          <strong>6. Test email</strong>
+          <p>Hantar email ujian ke <code>admin@tukuk.duckdns.org</code>.</p>
         </article>
       </div>
     </section>
 
-    <section id="contact">
-      <div class="panel">
-        <h3>Kontak</h3>
-        <p>
-          Email kerja utama:
-          <a href="mailto:admin@tukuk.duckdns.org">admin@tukuk.duckdns.org</a>
-        </p>
-        <p>
-          Domain:
-          <code>tukuk.duckdns.org</code>
-        </p>
-      </div>
+    <section id="contact" class="panel">
+      <h3>Kontak</h3>
+      <p>Email utama selepas setup:</p>
+      <pre><code>admin@tukuk.duckdns.org</code></pre>
+      <p>Domain:</p>
+      <pre><code>tukuk.duckdns.org</code></pre>
     </section>
   </main>
 
   <footer class="page">
-    © 2026 Tukuk. Hosted free and online 24/7.
+    © 2026 Tukuk. Built with free always-on hosting.
   </footer>
 </body>
 </html>
