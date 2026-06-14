@@ -322,14 +322,55 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
-    .tool-btn {
+    .editor-panel {
+      margin: 0 14px 14px;
       border: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(15, 23, 42, 0.68);
-      border-radius: 14px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(2, 6, 23, 0.42);
+    }
+    .editor-panel[hidden] {
+      display: none;
+    }
+    .editor-tabs {
+      display: flex;
+      gap: 6px;
       padding: 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .editor-tabs button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.5);
+      color: var(--muted);
+      padding: 7px 10px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 800;
+    }
+    .editor-tabs button.active {
+      color: #020617;
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      border-color: transparent;
+    }
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 320px;
+    }
+    .editor-grid textarea {
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      min-height: 320px;
+      resize: vertical;
+      background: #020617;
+    }
+    .preview-frame {
+      border: 0;
+      width: 100%;
+      min-height: 320px;
+      background: #fff;
     }
     .tool-btn:hover {
       border-color: rgba(34, 197, 94, 0.35);
@@ -496,13 +537,13 @@
 
   <div class="page hero" id="top">
     <div>
-      <div class="eyebrow">AI serba boleh dengan engine percuma client-side</div>
-      <h1>AI untuk buat <span class="gradient-text">semua jenis karya</span></h1>
+      <div class="eyebrow">AI pelajar percuma: buat app, media, gambar, video, dan belajar</div>
+      <h1>Tukuk AI boleh <span class="gradient-text">buat apa saja</span></h1>
       <p class="hero-copy">
-        AI ini direka untuk bantu anda buat hampir semua perkara digital: music, video, gambar,
-        belajar, menulis, melukis, buat projek, coding, idea bisnes, automasi, dan dokumentasi.
-        Chat boleh digerakkan, dibesarkan, dikecilkan, disimpan, dibaca dengan suara, dan disokong
-        oleh alat open-source browser seperti Web Audio API, Canvas, Speech API, dan localStorage.
+        Tukuk AI direka untuk pelajar dan semua orang yang perlukan AI percuma.
+        Dari chat, anda boleh minta buat aplikasi web apa saja, hasilkan bunyi music,
+        jana visual video, bina gambar/artboard, tulis dokumen, belajar subjek, buat coding,
+        edit teks atau kod, dan cari alternatif alat percuma/open-source.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#chat">Cuba AI engine</a>
@@ -541,6 +582,21 @@
         <button class="tool-btn" id="voiceButton" type="button">Suara ke teks</button>
         <button class="tool-btn" id="downloadButton" type="button">Download chat</button>
         <button class="tool-btn" id="clearButton" type="button">Reset chat</button>
+        <button class="tool-btn" id="appButton" type="button">Buat app web</button>
+        <button class="tool-btn" id="editButton" type="button">Edit teks/kod</button>
+      </div>
+      <div class="editor-panel" id="editorPanel" hidden>
+        <div class="editor-tabs">
+          <button type="button" class="active" data-tab="code">Code</button>
+          <button type="button" data-tab="preview">Preview</button>
+          <button type="button" data-tab="both">Both</button>
+          <button type="button" id="runEditor">Run</button>
+          <button type="button" id="downloadApp">Download App</button>
+        </div>
+        <div class="editor-grid">
+          <textarea id="editorCode" spellcheck="false"></textarea>
+          <iframe id="previewFrame" class="preview-frame" title="Live preview"></iframe>
+        </div>
       </div>
       <div class="composer">
         <div class="input-row">
@@ -548,6 +604,9 @@
           <button class="send" id="sendButton" type="button">Hantar</button>
         </div>
         <div class="quick" aria-label="Cadangan soalan">
+          <button type="button">Buat app web</button>
+          <button type="button">Edit apa saja</button>
+          <button type="button">Cari alat percuma</button>
           <button type="button">Buat music</button>
           <button type="button">Mainkan bunyi</button>
           <button type="button">Buat video</button>
@@ -653,6 +712,13 @@
     const voiceButton = document.getElementById('voiceButton');
     const downloadButton = document.getElementById('downloadButton');
     const clearButton = document.getElementById('clearButton');
+    const appButton = document.getElementById('appButton');
+    const editButton = document.getElementById('editButton');
+    const editorPanel = document.getElementById('editorPanel');
+    const editorCode = document.getElementById('editorCode');
+    const previewFrame = document.getElementById('previewFrame');
+    const runEditor = document.getElementById('runEditor');
+    const downloadApp = document.getElementById('downloadApp');
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -898,6 +964,72 @@
       ])}\n\nCadangan seterusnya:\nTulis lebih spesifik, contoh: "buat music tentang hujan", "buat gambar kucing cyberpunk", "buat projek web AI", atau "tulis kod landing page".`;
     }
 
+    function buildFreeTools(topic) {
+      const lower = topic.toLowerCase();
+      const tools = [
+        { name: 'GitHub Pages', use: 'Hosting web percuma', url: 'https://pages.github.com/' },
+        { name: 'Cloudflare Pages', use: 'Hosting web/worker percuma', url: 'https://pages.cloudflare.com/' },
+        { name: 'Hugging Face Spaces', use: 'Demo AI percuma', url: 'https://huggingface.co/spaces' },
+        { name: 'Replit', use: 'Coding dalam browser', url: 'https://replit.com/' },
+        { name: 'VS Code', use: 'Editor kod percuma', url: 'https://code.visualstudio.com/' },
+        { name: 'Blender', use: '3D, video, animasi percuma', url: 'https://www.blender.org/' },
+        { name: 'Krita', use: 'Lukis dan edit gambar percuma', url: 'https://krita.org/' },
+        { name: 'GIMP', use: 'Edit gambar percuma', url: 'https://www.gimp.org/' },
+        { name: 'Audacity', use: 'Edit audio percuma', url: 'https://www.audacityteam.org/' },
+        { name: 'OBS Studio', use: 'Rakam/stream video percuma', url: 'https://obsproject.com/' },
+        { name: 'DaVinci Resolve', use: 'Edit video percuma', url: 'https://www.blackmagicdesign.com/products/davinciresolve' },
+        { name: 'Canva', use: 'Reka bentuk mudah percuma', url: 'https://www.canva.com/' },
+        { name: 'Figma', use: 'UI/UX design percuma', url: 'https://www.figma.com/' },
+        { name: 'Google Colab', use: 'Python/AI notebook percuma', url: 'https://colab.research.google.com/' },
+        { name: 'Kaggle', use: 'Dataset dan latihan AI percuma', url: 'https://www.kaggle.com/' }
+      ];
+
+      const filtered = tools.filter((tool) => lower.includes(tool.name.toLowerCase().split(' ')[0]) || lower.includes(tool.use.toLowerCase().split(' ')[0]));
+      const selected = filtered.length ? filtered : tools.slice(0, 8);
+      return `🧰 Alat Percuma/Open Source\n\nUntuk: ${topic}\n\n${formatList(selected.map((tool) => `${tool.name} — ${tool.use} — ${tool.url}`))}\n\nCadangan percuma:\n- Web app: GitHub Pages atau Cloudflare Pages\n- Coding: VS Code, Replit, Google Colab\n- Gambar: Krita, GIMP, Canva, Figma\n- Video: OBS Studio, DaVinci Resolve, Blender\n- Audio: Audacity, Web Audio API\n- AI: Hugging Face Spaces, Kaggle`;
+    }
+
+    function buildAppBuilder(topic) {
+      const title = extractTopic(topic, 'Aplikasi Web Pelajar');
+      return `🛠️ App Builder Engine\n\nSaya boleh buat aplikasi web dari chat.\n\nAplikasi dicadangkan: ${title}\n\nCiri MVP:\n1. Halaman utama\n2. Input pengguna\n3. Proses data\n4. Papar hasil\n5. Simpan dalam localStorage jika perlu\n6. Download hasil sebagai fail\n\nStruktur fail:\nindex.html\nstyle.css\napp.js\n\nKlik butang "Buat app web" untuk buka editor live. Anda boleh edit HTML, CSS, JavaScript, run preview, dan download app siap.\n\nContoh arahan:\n- buat app kalkulator\n- buat app nota pelajar\n- buat app kuiz\n- buat app todo list\n- buat app chatbot\n- buat app portfolio`;
+    }
+
+    async function runMediaEngine(prompt) {
+      const lower = prompt.toLowerCase();
+      const title = extractTopic(prompt, 'AI media');
+
+      if (lower.includes('cari alat') || lower.includes('percuma') || lower.includes('open source') || lower.includes('opensource')) {
+        return buildFreeTools(title);
+      }
+
+      if (lower.includes('buat app') || lower.includes('aplikasi') || lower.includes('web app') || lower.includes('coding app') || lower.includes('program app')) {
+        return buildAppBuilder(title);
+      }
+
+      if (lower.includes('edit') || lower.includes('ubah') || lower.includes('dokumen') || lower.includes('teks') || lower.includes('kod')) {
+        return `✏️ Editor Engine\n\nSaya boleh edit apa saja: teks, dokumen, HTML, CSS, JavaScript, nota, artikel, dan kod app.\n\nKlik butang "Edit teks/kod" untuk buka editor live. Anda boleh paste apa saja, ubah, run, dan download.\n\nContoh arahan:\n- edit artikel ini\n- tukar kod HTML\n- buat dokumen pelajar\n- betulkan JavaScript\n- tambah CSS cantik`;
+      }
+
+      if (lower.includes('bunyi') || lower.includes('mainkan') || lower.includes('play') || lower.includes('music') || lower.includes('lagu') || lower.includes('audio')) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const context = new AudioContext();
+        await context.resume();
+        const source = context.createBufferSource();
+        source.buffer = generateMusicBuffer(context, title);
+        source.connect(context.destination);
+        source.start();
+        showMedia('Music Engine - bunyi AI dibuat dari chat', 'music');
+        return 'Saya sudah jana bunyi muzik AI terus dari browser menggunakan Web Audio API.';
+      }
+
+      if (lower.includes('video') || lower.includes('tengok') || lower.includes('visual')) {
+        showMedia('Video Engine - visual AI dibuat dari chat', 'video');
+        return 'Saya sudah jana visual video AI terus dari browser menggunakan canvas animation.';
+      }
+
+      return '';
+    }
+
     async function generateResponse(prompt) {
       const lower = prompt.toLowerCase();
       const topic = extractTopic(prompt, 'idea anda');
@@ -908,7 +1040,10 @@
 
       let output = '';
 
-      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) output = buildMusic(topic);
+      if (lower.includes('cari alat') || lower.includes('percuma') || lower.includes('open source') || lower.includes('opensource')) output = buildFreeTools(topic);
+      else if (lower.includes('buat app') || lower.includes('aplikasi') || lower.includes('web app') || lower.includes('coding app') || lower.includes('program app')) output = buildAppBuilder(topic);
+      else if (lower.includes('edit') || lower.includes('ubah') || lower.includes('dokumen') || lower.includes('teks') || lower.includes('kod')) output = `✏️ Editor Engine\n\nSaya boleh edit apa saja: teks, dokumen, HTML, CSS, JavaScript, nota, artikel, dan kod app. Klik butang "Edit teks/kod" untuk buka editor live.`;
+      else if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) output = buildMusic(topic);
       else if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard') || lower.includes('reels') || lower.includes('shorts')) output = buildVideo(topic);
       else if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi') || lower.includes('poster') || lower.includes('thumbnail')) output = buildImage(topic);
       else if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik') || lower.includes('ajar')) output = buildStudy(topic);
@@ -1028,6 +1163,80 @@
       return items.length ? items[items.length - 1].textContent : '';
     }
 
+    function buildWebAppHtml(topic) {
+      const title = extractTopic(topic, 'Aplikasi Web Pelajar');
+      return `<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0f172a;color:#e5e7eb}
+.app{max-width:900px;margin:0 auto;padding:32px}
+.card{background:#111827;border:1px solid #334155;border-radius:24px;padding:24px}
+input,button{font:inherit}input{width:100%;padding:14px;border-radius:14px;border:1px solid #334155;background:#020617;color:#e5e7eb}
+button{margin-top:12px;padding:12px 16px;border:0;border-radius:14px;background:#22c55e;color:#020617;font-weight:800;cursor:pointer}
+.result{margin-top:18px;line-height:1.7;color:#cbd5e1}
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="card">
+    <h1>${title}</h1>
+    <p>Aplikasi web ringkas dijana oleh Tukuk AI untuk pelajar.</p>
+    <input id="input" placeholder="Masukkan sesuatu">
+    <button id="btn">Hasilkan</button>
+    <div class="result" id="result">Hasil akan muncul di sini.</div>
+  </section>
+</main>
+<script>
+const input=document.querySelector('#input');
+const btn=document.querySelector('#btn');
+const result=document.querySelector('#result');
+btn.addEventListener('click',()=>{
+ result.textContent='Tukuk AI hasilkan: '+input.value;
+});
+<\/script>
+</body>
+</html>`;
+    }
+
+    function buildEditableText(topic) {
+      const title = extractTopic(topic, 'Dokumen pelajar');
+      return `# ${title}\n\nTajuk: ${title}\n\nPendahuluan:\nDokumen ini dibantu oleh Tukuk AI untuk pelajar. Ia boleh disunting terus dalam editor.\n\nIsi penting:\n1. Tujuan\n2. Langkah kerja\n3. Hasil\n4. Kesimpulan\n\nKesimpulan:\nGunakan AI percuma untuk belajar, menyusun idea, dan menyiapkan tugasan dengan lebih pantas.`;
+    }
+
+    function openEditor(code, mode = 'both') {
+      editorPanel.hidden = false;
+      editorCode.value = code;
+      document.querySelectorAll('.editor-tabs button[data-tab]').forEach((button) => button.classList.remove('active'));
+      const active = document.querySelector(`.editor-tabs button[data-tab="${mode}"]`);
+      if (active) active.classList.add('active');
+      const grid = editorPanel.querySelector('.editor-grid');
+      if (mode === 'code') {
+        grid.style.gridTemplateColumns = '1fr';
+        previewFrame.style.display = 'none';
+      } else if (mode === 'preview') {
+        grid.style.gridTemplateColumns = '1fr';
+        editorCode.style.display = 'none';
+        previewFrame.style.display = 'block';
+      } else {
+        grid.style.gridTemplateColumns = '1fr 1fr';
+        editorCode.style.display = 'block';
+        previewFrame.style.display = 'block';
+      }
+      runPreview();
+    }
+
+    function runPreview() {
+      const code = editorCode.value;
+      const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+      doc.open();
+      doc.write(code);
+      doc.close();
+    }
+
     function setupOpenSourceTools() {
       speakButton.addEventListener('click', () => {
         const text = getLastAiText();
@@ -1079,6 +1288,55 @@
         messages.innerHTML = '';
         localStorage.removeItem('tukuk-ai-chat-history');
         showToast('Chat telah dipadam');
+      });
+
+      appButton.addEventListener('click', () => {
+        const code = buildWebAppHtml(promptInput.value || 'Aplikasi Web Pelajar');
+        openEditor(code, 'both');
+        addMessage('Saya dah jana aplikasi web ringkas dalam editor live. Anda boleh edit, run, dan download HTML app ini.', 'ai');
+      });
+
+      editButton.addEventListener('click', () => {
+        const code = buildEditableText(promptInput.value || 'Dokumen pelajar');
+        openEditor(code, 'code');
+        addMessage('Editor dibuka. Anda boleh edit teks, nota, dokumen, HTML, CSS, JavaScript, atau kod app.', 'ai');
+      });
+
+      document.querySelectorAll('.editor-tabs button[data-tab]').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.editor-tabs button[data-tab]').forEach((item) => item.classList.remove('active'));
+          button.classList.add('active');
+          const mode = button.dataset.tab;
+          const grid = editorPanel.querySelector('.editor-grid');
+          if (mode === 'code') {
+            grid.style.gridTemplateColumns = '1fr';
+            editorCode.style.display = 'block';
+            previewFrame.style.display = 'none';
+          } else if (mode === 'preview') {
+            grid.style.gridTemplateColumns = '1fr';
+            editorCode.style.display = 'none';
+            previewFrame.style.display = 'block';
+            runPreview();
+          } else {
+            grid.style.gridTemplateColumns = '1fr 1fr';
+            editorCode.style.display = 'block';
+            previewFrame.style.display = 'block';
+            runPreview();
+          }
+        });
+      });
+
+      runEditor.addEventListener('click', runPreview);
+
+      downloadApp.addEventListener('click', () => {
+        const blob = new Blob([editorCode.value], { type: editorCode.value.includes('<html') ? 'text/html' : 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = editorCode.value.includes('<html') ? 'tukuk-ai-app.html' : 'tukuk-ai-doc.md';
+        link.click();
+        URL.revokeObjectURL(url);
+        showToast('Fail telah dimuat turun');
       });
     }
 
