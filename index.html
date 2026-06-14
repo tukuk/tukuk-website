@@ -241,6 +241,42 @@
       background: linear-gradient(135deg, rgba(14, 165, 233, 0.22), rgba(34, 197, 94, 0.16));
       border-color: rgba(56, 189, 248, 0.22);
     }
+    .media-panel {
+      border-top: 1px solid var(--line);
+      background: rgba(2, 6, 23, 0.55);
+      padding: 14px;
+    }
+    .media-panel[hidden] {
+      display: none;
+    }
+    .media-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 12px;
+    }
+    .media-header button {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    #visualCanvas {
+      width: 100%;
+      height: 260px;
+      border-radius: 18px;
+      background: #020617;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    #audioPlayer {
+      width: 100%;
+      margin-top: 10px;
+    }
     .composer { padding: 16px; border-top: 1px solid var(--line); background: rgba(2, 6, 23, 0.35); }
     .input-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
     textarea {
@@ -430,6 +466,14 @@
         <span class="status">Online</span>
       </div>
       <div class="messages" id="messages"></div>
+      <div class="media-panel" id="mediaPanel" hidden>
+        <div class="media-header">
+          <strong id="mediaTitle">Media Engine</strong>
+          <button type="button" id="mediaClose" aria-label="Tutup media">✕</button>
+        </div>
+        <canvas id="visualCanvas" width="640" height="260"></canvas>
+        <audio id="audioPlayer" controls></audio>
+      </div>
       <div class="composer">
         <div class="input-row">
           <textarea id="promptInput" rows="2" placeholder="Minta AI bantu buat music, video, gambar, belajar, menulis, melukis, projek, atau coding..."></textarea>
@@ -437,6 +481,7 @@
         </div>
         <div class="quick" aria-label="Cadangan soalan">
           <button type="button">Buat music</button>
+          <button type="button">Mainkan bunyi</button>
           <button type="button">Buat video</button>
           <button type="button">Buat gambar</button>
           <button type="button">Belajar coding</button>
@@ -522,6 +567,12 @@
     const promptInput = document.getElementById('promptInput');
     const sendButton = document.getElementById('sendButton');
     const toast = document.getElementById('toast');
+    const mediaPanel = document.getElementById('mediaPanel');
+    const mediaTitle = document.getElementById('mediaTitle');
+    const mediaClose = document.getElementById('mediaClose');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const canvas = document.getElementById('visualCanvas');
+    const ctx = canvas.getContext('2d');
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -630,6 +681,111 @@
       return `🎨 Melukis Engine\n\nIdea: ${titleCase(title)}\nGaya: ${pick(['anime', 'realistic', 'cartoon', 'sketch', 'watercolor', 'cyberpunk'])}\nPerspektif: ${pick(['3/4 view', 'front view', 'isometric', 'top view', 'dynamic angle'])}\n\nLangkah melukis:\n1. Buat bentuk asas dengan garisan ringkas.\n2. Tentukan siluet utama.\n3. Tambah wajah, objek, atau elemen penting.\n4. Letakkan sumber cahaya.\n5. Tambah bayang kasar.\n6. Masukkan warna utama.\n7. Tambah highlight dan detail akhir.\n\nPrompt lukisan:\nLukis "${title}" dengan gaya ${pick(['bersih', 'dinamik', 'lembut', 'futuristik'])}, fokus pada bentuk jelas, warna menarik, dan komposisi mudah difahami.`;
     }
 
+    function playTone(context, frequency, start, duration, gainValue, type) {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(gainValue, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration + 0.05);
+    }
+
+    function generateMusicBuffer(context, theme) {
+      const sampleRate = context.sampleRate;
+      const length = sampleRate * 8;
+      const buffer = context.createBuffer(2, length, sampleRate);
+      const scales = {
+        happy: [261.63, 329.63, 392.00, 523.25, 659.25],
+        calm: [220.00, 277.18, 329.63, 440.00, 554.37],
+        epic: [196.00, 246.94, 293.66, 392.00, 493.88],
+        future: [174.61, 233.08, 349.23, 466.16, 698.46]
+      };
+      const scale = scales[Object.keys(scales)[Math.floor(Math.random() * Object.keys(scales).length)]];
+
+      for (let channel = 0; channel < 2; channel++) {
+        const data = buffer.getChannelData(channel);
+        for (let i = 0; i < length; i++) {
+          const t = i / sampleRate;
+          const pad = Math.sin(2 * Math.PI * scale[0] * t) * 0.08 + Math.sin(2 * Math.PI * scale[1] * t) * 0.05;
+          const beat = Math.floor(t * 2) % 4 === 0 ? Math.sin(2 * Math.PI * 80 * t) * 0.18 : 0;
+          const hi = Math.sin(2 * Math.PI * 5000 * t) * (Math.floor(t * 8) % 2 ? 0.025 : 0);
+          data[i] = (pad + beat + hi) * (1 - Math.min(t / 8, 1) * 0.18);
+        }
+      }
+      return buffer;
+    }
+
+    function showMedia(title, kind) {
+      mediaPanel.hidden = false;
+      mediaTitle.textContent = title;
+      mediaPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (kind === 'video') drawVisualizer(title);
+    }
+
+    function drawVisualizer(title) {
+      const width = canvas.width;
+      const height = canvas.height;
+      let frame = 0;
+
+      function draw() {
+        frame++;
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#020617');
+        gradient.addColorStop(0.5, '#0f172a');
+        gradient.addColorStop(1, '#111827');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        for (let i = 0; i < 70; i++) {
+          const x = (i / 70) * width;
+          const barHeight = 20 + Math.sin(frame * 0.08 + i * 0.45) * 35 + Math.random() * 35;
+          const hue = (frame * 2 + i * 5) % 360;
+          ctx.fillStyle = `hsl(${hue}, 85%, 60%)`;
+          ctx.fillRect(x, height - barHeight, width / 90, barHeight);
+        }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.font = '700 22px Inter, sans-serif';
+        ctx.fillText(title.slice(0, 34), 22, 34);
+        ctx.fillStyle = 'rgba(148,163,184,0.85)';
+        ctx.font = '500 14px Inter, sans-serif';
+        ctx.fillText('Video AI visualizer - client-side animation', 22, 58);
+
+        if (!mediaPanel.hidden) requestAnimationFrame(draw);
+      }
+
+      draw();
+    }
+
+    async function runMediaEngine(prompt) {
+      const lower = prompt.toLowerCase();
+      const title = extractTopic(prompt, 'AI media');
+
+      if (lower.includes('bunyi') || lower.includes('mainkan') || lower.includes('play') || lower.includes('music') || lower.includes('lagu') || lower.includes('audio')) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const context = new AudioContext();
+        await context.resume();
+        const source = context.createBufferSource();
+        source.buffer = generateMusicBuffer(context, title);
+        source.connect(context.destination);
+        source.start();
+        showMedia('Music Engine - bunyi AI dibuat dari chat', 'music');
+        return 'Saya sudah jana bunyi muzik AI terus dari browser menggunakan Web Audio API.';
+      }
+
+      if (lower.includes('video') || lower.includes('tengok') || lower.includes('visual')) {
+        showMedia('Video Engine - visual AI dibuat dari chat', 'video');
+        return 'Saya sudah jana visual video AI terus dari browser menggunakan canvas animation.';
+      }
+
+      return '';
+    }
+
     function buildStudy(topic) {
       const title = extractTopic(topic, 'topik yang dipelajari');
       return `📚 Belajar Engine\n\nTopik: ${titleCase(title)}\n\nPenjelasan ringkas:\nMulakan dengan definisi mudah, kemudian pecahkan kepada bahagian kecil. Fahami konsep asas, lihat contoh, buat latihan, dan ulang dengan bahasa sendiri.\n\nPelan belajar 30 minit:\n1. 5 minit: baca definisi.\n2. 10 minit: fahami konsep utama.\n3. 10 minit: buat contoh kecil.\n4. 5 minit: buat ringkasan.\n\nKuiz pantas:\n1. Apakah tujuan utama topik ini?\n2. Apakah 3 bahagian penting?\n3. Berikan satu contoh mudah.\n4. Apakah kesilapan biasa?\n\nNota ringkas:\nTopik ini lebih mudah jika dipelajari secara langkah demi langkah, bukan hafal terus.`;
@@ -662,10 +818,13 @@
       ])}\n\nCadangan seterusnya:\nTulis lebih spesifik, contoh: "buat music tentang hujan", "buat gambar kucing cyberpunk", "buat projek web AI", atau "tulis kod landing page".`;
     }
 
-    function generateResponse(prompt) {
+    async function generateResponse(prompt) {
       const lower = prompt.toLowerCase();
       const topic = extractTopic(prompt, 'idea anda');
       const language = detectLanguage(prompt);
+
+      const mediaOutput = await runMediaEngine(prompt);
+      if (mediaOutput) return addLanguageNote(language, mediaOutput);
 
       let output = '';
 
@@ -706,7 +865,7 @@
       showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    function sendPrompt() {
+    async function sendPrompt() {
       const text = promptInput.value.trim();
       if (!text) return;
 
@@ -716,12 +875,16 @@
       sendButton.disabled = true;
       sendButton.textContent = 'Proses';
 
-      window.setTimeout(() => {
-        addMessage(generateResponse(text), 'ai');
+      try {
+        const response = await generateResponse(text);
+        addMessage(response, 'ai');
+      } catch (error) {
+        addMessage('Maaf, browser tidak dapat jana media. Cuba guna butang generate idea, projek, atau coding.', 'ai');
+      } finally {
         sendButton.disabled = false;
         sendButton.textContent = 'Hantar';
         promptInput.focus();
-      }, 420);
+      }
     }
 
     sendButton.addEventListener('click', sendPrompt);
@@ -744,6 +907,11 @@
         promptInput.focus();
         showToast('Engine dipilih');
       });
+    });
+
+    mediaClose.addEventListener('click', () => {
+      mediaPanel.hidden = true;
+      audioPlayer.pause();
     });
 
     addMessage(greetings[Math.floor(Math.random() * greetings.length)], 'ai');
