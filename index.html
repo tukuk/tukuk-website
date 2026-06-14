@@ -415,7 +415,44 @@
       font-size: 0.82rem;
     }
     .quick button:hover { color: var(--text); border-color: rgba(56, 189, 248, 0.35); }
-
+    .student-dashboard {
+      margin: 0 14px 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.42);
+    }
+    .student-dashboard[hidden] { display: none; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .dashboard-grid input, .dashboard-grid textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.82);
+      color: var(--text);
+      outline: none;
+    }
+    .dashboard-grid textarea { min-height: 82px; resize: vertical; }
+    .dashboard-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .dashboard-actions button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 12px;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .dashboard-output {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--muted);
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
     main { padding: 26px 0 10px; }
     section { padding: 42px 0; }
     .section-title { margin: 0 0 16px; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.06em; }
@@ -598,12 +635,32 @@
           <iframe id="previewFrame" class="preview-frame" title="Live preview"></iframe>
         </div>
       </div>
+      <div class="student-dashboard" id="studentDashboard" hidden>
+        <strong>Student Study Assistant</strong>
+        <div class="dashboard-grid" style="margin-top:12px">
+          <input id="subjectInput" placeholder="Subjek, contoh: Matematik / Coding / Sejarah">
+          <input id="deadlineInput" placeholder="Tarikh/tenggang masa, contoh: 2 jam / esok">
+          <textarea id="notesInput" placeholder="Nota/tugasan/topik yang perlu difahami"></textarea>
+          <textarea id="goalInput" placeholder="Matlamat, contoh: faham algebra, siap tugasan, buat kuiz"></textarea>
+        </div>
+        <div class="dashboard-actions">
+          <button type="button" id="planStudy">Pelankan belajar</button>
+          <button type="button" id="makeQuiz">Buat kuiz</button>
+          <button type="button" id="makeFlashcards">Flashcards</button>
+          <button type="button" id="focusTimer">Mode fokus</button>
+          <button type="button" id="portfolioExport">Eksport portfolio</button>
+        </div>
+        <div class="dashboard-output" id="dashboardOutput">Isi subjek, nota, dan matlamat untuk dapatkan bantuan belajar.</div>
+      </div>
       <div class="composer">
         <div class="input-row">
           <textarea id="promptInput" rows="2" placeholder="Minta AI bantu buat music, video, gambar, belajar, menulis, melukis, projek, atau coding..."></textarea>
           <button class="send" id="sendButton" type="button">Hantar</button>
         </div>
         <div class="quick" aria-label="Cadangan soalan">
+          <button type="button">Pelankan belajar</button>
+          <button type="button">Buat kuiz</button>
+          <button type="button">Flashcards</button>
           <button type="button">Buat app web</button>
           <button type="button">Edit apa saja</button>
           <button type="button">Cari alat percuma</button>
@@ -644,6 +701,10 @@
         <article class="card">
           <h3>Open-source tools</h3>
           <p>Gunakan Web Audio API, Canvas, Speech API, localStorage, dan download chat tanpa kos.</p>
+        </article>
+        <article class="card">
+          <h3>Student dashboard</h3>
+          <p>Pelan belajar, kuiz, flashcards, mode fokus, dan eksport portfolio untuk pelajar.</p>
         </article>
       </div>
     </section>
@@ -719,6 +780,17 @@
     const previewFrame = document.getElementById('previewFrame');
     const runEditor = document.getElementById('runEditor');
     const downloadApp = document.getElementById('downloadApp');
+    const studentDashboard = document.getElementById('studentDashboard');
+    const subjectInput = document.getElementById('subjectInput');
+    const deadlineInput = document.getElementById('deadlineInput');
+    const notesInput = document.getElementById('notesInput');
+    const goalInput = document.getElementById('goalInput');
+    const dashboardOutput = document.getElementById('dashboardOutput');
+    const planStudy = document.getElementById('planStudy');
+    const makeQuiz = document.getElementById('makeQuiz');
+    const makeFlashcards = document.getElementById('makeFlashcards');
+    const focusTimer = document.getElementById('focusTimer');
+    const portfolioExport = document.getElementById('portfolioExport');
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -994,6 +1066,66 @@
       return `🛠️ App Builder Engine\n\nSaya boleh buat aplikasi web dari chat.\n\nAplikasi dicadangkan: ${title}\n\nCiri MVP:\n1. Halaman utama\n2. Input pengguna\n3. Proses data\n4. Papar hasil\n5. Simpan dalam localStorage jika perlu\n6. Download hasil sebagai fail\n\nStruktur fail:\nindex.html\nstyle.css\napp.js\n\nKlik butang "Buat app web" untuk buka editor live. Anda boleh edit HTML, CSS, JavaScript, run preview, dan download app siap.\n\nContoh arahan:\n- buat app kalkulator\n- buat app nota pelajar\n- buat app kuiz\n- buat app todo list\n- buat app chatbot\n- buat app portfolio`;
     }
 
+    function getStudentData() {
+      return {
+        subject: subjectInput.value.trim() || 'Pelajaran',
+        deadline: deadlineInput.value.trim() || 'masa terdekat',
+        notes: notesInput.value.trim() || 'tiada nota khusus',
+        goal: goalInput.value.trim() || 'belajar dengan lebih teratur'
+      };
+    }
+
+    function makeStudyPlan(data) {
+      return `📚 Pelan Belajar Pelajar\n\nSubjek: ${data.subject}\nMatlamat: ${data.goal}\nMasa: ${data.deadline}\n\nLangkah belajar:\n1. Baca nota utama 10 minit.\n2. Pecahkan topik susah kepada 3 bahagian kecil.\n3. Buat contoh mudah.\n4. Uji diri dengan 5 soalan.\n5. Ringkaskan dalam 5 baris.\n6. Ulang bahagian yang masih kabur.\n\nNota yang diberi:\n${data.notes}\n\nChecklist siap:\n- Faham definisi\n- Ada contoh\n- Ada latihan\n- Ada ringkasan\n- Tahu apa perlu buat seterusnya`;
+    }
+
+    function makeQuiz(data) {
+      return `📝 Kuiz Pantas\n\nSubjek: ${data.subject}\n\n1. Apakah idea utama topik ini?\n2. Nyatakan 3 perkara penting.\n3. Berikan satu contoh mudah.\n4. Apakah kesilapan biasa pelajar buat?\n5. Bagaimana anda gunakan ilmu ini dalam tugasan sebenar?\n\nJawapan cadangan:\nGunakan nota anda: ${data.notes}\nJika tidak pasti, minta Tukuk AI terangkan satu persatu.`;
+    }
+
+    function makeFlashcards(data) {
+      return `🗂️ Flashcards\n\nSubjek: ${data.subject}\n\nKad 1:\nSoalan: Apakah tujuan utama topik ini?\nJawapan: Untuk memahami konsep asas dan boleh guna dalam tugasan.\n\nKad 2:\nSoalan: Apakah 3 perkara paling penting?\nJawapan: Definisi, contoh, dan latihan.\n\nKad 3:\nSoalan: Bagaimana saya tahu saya sudah faham?\nJawapan: Saya boleh terangkan semula dengan bahasa sendiri.\n\nKad 4:\nSoalan: Apa langkah seterusnya?\nJawapan: Buat latihan, semak jawapan, dan ulang bahagian lemah.\n\nNota: ${data.notes}`;
+    }
+
+    function makeFocusMode(data) {
+      return `⏱️ Mode Fokus Pelajar\n\nSubjek: ${data.subject}\nMatlamat: ${data.goal}\n\nSiklus 25 minit:\n1. 5 minit: baca tujuan tugasan.\n2. 15 minit: buat kerja tanpa ganggu.\n3. 5 minit: semak hasil.\n\nSelepas itu rehat 5 minit. Ulang 2-4 pusingan.\n\nPeraturan:\n- Tutup notifikasi\n- Buka hanya bahan belajar\n- Tulis satu hasil kecil setiap pusingan\n- Jangan tukar topik bila belum siap`;
+    }
+
+    function makePortfolio(data) {
+      return `🧾 Portfolio Pelajar\n\nNama projek: ${data.subject}\nTujuan: ${data.goal}\n\nRingkasan:\nProjek ini dibantu oleh Tukuk AI untuk pelajar. Ia menunjukkan proses belajar, hasil kerja, dan kemahiran yang diperoleh.\n\nBahagian portfolio:\n1. Tajuk projek\n2. Masalah atau tujuan\n3. Langkah kerja\n4. Hasil akhir\n5. Apa yang dipelajari\n6. Screenshot atau bukti kerja\n7. Refleksi diri\n\nTemplate export:\nTajuk: ${data.subject}\nMatlamat: ${data.goal}\nNota: ${data.notes}\nTarikh siap: ${data.deadline}`;
+    }
+
+    function openStudentDashboard() {
+      studentDashboard.hidden = false;
+      studentDashboard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function setupStudentDashboard() {
+      planStudy.addEventListener('click', () => {
+        dashboardOutput.textContent = makeStudyPlan(getStudentData());
+      });
+      makeQuiz.addEventListener('click', () => {
+        dashboardOutput.textContent = makeQuiz(getStudentData());
+      });
+      makeFlashcards.addEventListener('click', () => {
+        dashboardOutput.textContent = makeFlashcards(getStudentData());
+      });
+      focusTimer.addEventListener('click', () => {
+        dashboardOutput.textContent = makeFocusMode(getStudentData());
+      });
+      portfolioExport.addEventListener('click', () => {
+        const text = makePortfolio(getStudentData());
+        dashboardOutput.textContent = text;
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'portfolio-pelajar-tukuk-ai.txt';
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
     async function runMediaEngine(prompt) {
       const lower = prompt.toLowerCase();
       const title = extractTopic(prompt, 'AI media');
@@ -1040,7 +1172,10 @@
 
       let output = '';
 
-      if (lower.includes('cari alat') || lower.includes('percuma') || lower.includes('open source') || lower.includes('opensource')) output = buildFreeTools(topic);
+      if (lower.includes('pelan belajar') || lower.includes('kuiz') || lower.includes('flashcard') || lower.includes('mode fokus') || lower.includes('portfolio pelajar') || lower.includes('dashboard pelajar')) {
+        openStudentDashboard();
+        output = `🎓 Student Dashboard dibuka. Isi subjek, nota, tarikh, dan matlamat, kemudian tekan butang yang sesuai.`;
+      } else if (lower.includes('cari alat') || lower.includes('percuma') || lower.includes('open source') || lower.includes('opensource')) output = buildFreeTools(topic);
       else if (lower.includes('buat app') || lower.includes('aplikasi') || lower.includes('web app') || lower.includes('coding app') || lower.includes('program app')) output = buildAppBuilder(topic);
       else if (lower.includes('edit') || lower.includes('ubah') || lower.includes('dokumen') || lower.includes('teks') || lower.includes('kod')) output = `✏️ Editor Engine\n\nSaya boleh edit apa saja: teks, dokumen, HTML, CSS, JavaScript, nota, artikel, dan kod app. Klik butang "Edit teks/kod" untuk buka editor live.`;
       else if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) output = buildMusic(topic);
@@ -1379,6 +1514,9 @@ btn.addEventListener('click',()=>{
     document.querySelectorAll('.quick button').forEach((button) => {
       button.addEventListener('click', () => {
         promptInput.value = `${button.textContent} tentang projek AI Tukuk`;
+        if (button.textContent.includes('Pelankan') || button.textContent.includes('kuiz') || button.textContent.includes('Flashcards')) {
+          openStudentDashboard();
+        }
         promptInput.focus();
         showToast('Engine dipilih');
       });
@@ -1391,6 +1529,7 @@ btn.addEventListener('click',()=>{
 
     setupDraggableChat();
     setupOpenSourceTools();
+    setupStudentDashboard();
     loadChat();
     addMessage(greetings[Math.floor(Math.random() * greetings.length)], 'ai');
   </script>
