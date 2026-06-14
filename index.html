@@ -526,18 +526,70 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const greetings = [
-      'Hai! Saya Tukuk Assistant. Pilih music, video, gambar, belajar, menulis, melukis, projek, atau coding.',
-      'Saya ada engine percuma client-side untuk buat prompt, lirik, idea visual, kod, dan pelan projek.',
-      'Tulis apa yang anda mahu buat, contoh: buat lagu pop tentang malam, buat gambar robot comel, atau buat projek web AI.'
+      `Hai! Saya Tukuk Assistant. Pilih music, video, gambar, belajar, menulis, melukis, projek, atau coding.`,
+      `Saya ada engine percuma client-side untuk buat prompt, lirik, idea visual, kod, dan pelan projek.`,
+      `Tulis apa yang anda mahu buat dalam mana-mana bahasa: buat lagu pop tentang malam, make a cyberpunk image, crée un projet web, 作图, 動画, 노래, música, فيديو.`
     ];
 
-    const musicStyles = ['lo-fi', 'pop', 'hip-hop', 'EDM', 'akustik', 'rock', 'cinematic', 'jazz'];
+    const languages = [
+      { name: 'Bahasa Melayu', code: 'ms', detect: ['saya', 'boleh', 'buat', 'yang', 'ini', 'dengan', 'untuk'], hello: 'Hai!' },
+      { name: 'English', code: 'en', detect: ['i', 'you', 'the', 'and', 'make', 'create', 'help'], hello: 'Hello!' },
+      { name: 'Bahasa Indonesia', code: 'id', detect: ['saya', 'bisa', 'buat', 'yang', 'ini', 'dengan', 'untuk'], hello: 'Halo!' },
+      { name: 'Español', code: 'es', detect: ['hola', 'quiero', 'puedes', 'crear', 'hacer', 'para', 'con'], hello: '¡Hola!' },
+      { name: 'Français', code: 'fr', detect: ['bonjour', 'je', 'peux', 'créer', 'faire', 'pour', 'avec'], hello: 'Bonjour!' },
+      { name: 'Deutsch', code: 'de', detect: ['hallo', 'ich', 'kann', 'erstellen', 'machen', 'für', 'mit'], hello: 'Hallo!' },
+      { name: 'Italiano', code: 'it', detect: ['ciao', 'posso', 'creare', 'fare', 'per', 'con', 'aiuto'], hello: 'Ciao!' },
+      { name: 'Português', code: 'pt', detect: ['ola', 'olá', 'posso', 'criar', 'fazer', 'para', 'com'], hello: 'Olá!' },
+      { name: 'Nederlands', code: 'nl', detect: ['hallo', 'ik', 'kan', 'maken', 'voor', 'met', 'helpen'], hello: 'Hallo!' },
+      { name: 'Русский', code: 'ru', detect: ['привет', 'могу', 'создать', 'делать', 'для', 'помочь'], hello: 'Привет!' },
+      { name: 'العربية', code: 'ar', detect: ['مرحبا', 'أريد', 'يمكن', 'إنشاء', 'مساعدة'], hello: 'مرحبا!' },
+      { name: '中文', code: 'zh', detect: ['你好', '可以', '创建', '制作', '帮助'], hello: '你好!' },
+      { name: '日本語', code: 'ja', detect: ['こんにちは', 'できます', '作る', '作成', '助けて'], hello: 'こんにちは!' },
+      { name: '한국어', code: 'ko', detect: ['안녕', '만들', '수', '도움', '생성'], hello: '안녕!' },
+      { name: 'हिन्दी', code: 'hi', detect: ['नमस्ते', 'मैं', 'बना', 'सकते', 'मदद'], hello: 'नमस्ते!' },
+      { name: 'ไทย', code: 'th', detect: ['สวัสดี', 'ช่วย', 'สร้าง', 'ทำ', 'ได้'], hello: 'สวัสดี!' },
+      { name: 'Tiếng Việt', code: 'vi', detect: ['xin', 'chào', 'tôi', 'có', 'tạo', 'giúp'], hello: 'Xin chào!' },
+      { name: 'Tagalog', code: 'tl', detect: ['kumusta', 'gusto', 'ko', 'gawa', 'tulong'], hello: 'Kumusta!' },
+      { name: 'Türkçe', code: 'tr', detect: ['merhaba', 'yap', 'oluştur', 'yardım', 'için'], hello: 'Merhaba!' },
+      { name: 'Polski', code: 'pl', detect: ['cześć', 'mogę', 'utworzyć', 'zrobić', 'pomoc'], hello: 'Cześć!' },
+      { name: 'Українська', code: 'uk', detect: ['привіт', 'можу', 'створити', 'зробити', 'допомога'], hello: 'Привіт!' },
+      { name: 'فارسی', code: 'fa', detect: ['سلام', 'می‌توانم', 'ایجاد', 'کمک'], hello: 'سلام!' },
+      { name: 'עברית', code: 'he', detect: ['שלום', 'אני', 'יכול', 'ליצור', 'לעזור'], hello: 'שלום!' },
+      { name: 'Swahili', code: 'sw', detect: ['habari', 'ninaweza', 'kuunda', 'kusaidia'], hello: 'Habari!' },
+      { name: 'Afrikaans', code: 'af', detect: ['hallo', 'kan', 'maak', 'help'], hello: 'Hallo!' },
+      { name: 'Filipino', code: 'fil', detect: ['kumusta', 'gusto', 'gawa', 'tulong'], hello: 'Kumusta!' }
+    ];
     const visualStyles = ['cyberpunk', 'minimal', 'watercolor', '3D render', 'anime', 'flat design', 'pixel art', 'realistic'];
     const projectTypes = ['web app', 'mobile app', 'portfolio', 'dashboard', 'game', 'bot', 'landing page'];
     const codeStacks = ['HTML/CSS/JS', 'React', 'Vue', 'Node.js', 'Python', 'PHP', 'WordPress'];
 
     function pick(list) {
       return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function detectLanguage(text) {
+      const lower = text.toLowerCase();
+      let best = languages[0];
+      let bestScore = 0;
+
+      languages.forEach((language) => {
+        const score = language.detect.reduce((total, word) => total + (lower.includes(word.toLowerCase()) ? 1 : 0), 0);
+        if (score > bestScore) {
+          best = language;
+          bestScore = score;
+        }
+      });
+
+      return bestScore > 0 ? best : languages[0];
+    }
+
+    function translateHello(language) {
+      return `${language.hello} Saya boleh bantu dalam ${language.name}.`;
+    }
+
+    function addLanguageNote(language, output) {
+      if (language.code === 'ms') return output;
+      return `${translateHello(language)}\n\n${output}\n\nTerjemahan ringkas Bahasa Melayu:\nSaya boleh bantu hasilkan idea, prompt, pelan, kod, atau langkah seterusnya untuk permintaan anda.`;
     }
 
     function titleCase(text) {
@@ -613,16 +665,21 @@
     function generateResponse(prompt) {
       const lower = prompt.toLowerCase();
       const topic = extractTopic(prompt, 'idea anda');
+      const language = detectLanguage(prompt);
 
-      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) return buildMusic(topic);
-      if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard') || lower.includes('reels') || lower.includes('shorts')) return buildVideo(topic);
-      if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi') || lower.includes('poster') || lower.includes('thumbnail')) return buildImage(topic);
-      if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik') || lower.includes('ajar')) return buildStudy(topic);
-      if (lower.includes('tulis') || lower.includes('artikel') || lower.includes('cerita') || lower.includes('email') || lower.includes('caption') || lower.includes('skrip')) return buildWriting(topic);
-      if (lower.includes('lukis') || lower.includes('melukis') || lower.includes('gaya visual') || lower.includes('komposisi') || lower.includes('seni')) return buildDrawing(topic);
-      if (lower.includes('projek') || lower.includes('bisnes') || lower.includes('mvp') || lower.includes('roadmap')) return buildProject(topic);
-      if (lower.includes('coding') || lower.includes('code') || lower.includes('kod') || lower.includes('debug') || lower.includes('program') || lower.includes('html') || lower.includes('javascript')) return buildCoding(topic);
-      return buildGeneral(topic);
+      let output = '';
+
+      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) output = buildMusic(topic);
+      else if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard') || lower.includes('reels') || lower.includes('shorts')) output = buildVideo(topic);
+      else if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi') || lower.includes('poster') || lower.includes('thumbnail')) output = buildImage(topic);
+      else if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik') || lower.includes('ajar')) output = buildStudy(topic);
+      else if (lower.includes('tulis') || lower.includes('artikel') || lower.includes('cerita') || lower.includes('email') || lower.includes('caption') || lower.includes('skrip')) output = buildWriting(topic);
+      else if (lower.includes('lukis') || lower.includes('melukis') || lower.includes('gaya visual') || lower.includes('komposisi') || lower.includes('seni')) output = buildDrawing(topic);
+      else if (lower.includes('projek') || lower.includes('bisnes') || lower.includes('mvp') || lower.includes('roadmap')) output = buildProject(topic);
+      else if (lower.includes('coding') || lower.includes('code') || lower.includes('kod') || lower.includes('debug') || lower.includes('program') || lower.includes('html') || lower.includes('javascript')) output = buildCoding(topic);
+      else output = buildGeneral(topic);
+
+      return addLanguageNote(language, output);
     }
 
     function addMessage(text, role) {
