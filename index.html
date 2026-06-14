@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tukuk AI Studio</title>
-  <meta name="description" content="Projek web AI percuma oleh Tukuk untuk chat, idea projek, dan automasi web.">
+  <meta name="description" content="Projek web AI percuma oleh Tukuk untuk chat, idea projek, automasi web, music, video, gambar, belajar, menulis, melukis, dan coding.">
   <meta name="theme-color" content="#020617">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -394,7 +394,7 @@
       </a>
       <div class="nav-links">
         <a href="#chat">AI Chat</a>
-        <a href="#features">Ciri</a>
+        <a href="#features">Engine</a>
         <a href="#roadmap">Pelankan</a>
       </div>
     </nav>
@@ -402,7 +402,7 @@
 
   <div class="page hero" id="top">
     <div>
-      <div class="eyebrow">AI serba boleh untuk semua projek anda</div>
+      <div class="eyebrow">AI serba boleh dengan engine percuma client-side</div>
       <h1>AI untuk buat <span class="gradient-text">semua jenis karya</span></h1>
       <p class="hero-copy">
         AI ini direka untuk bantu anda buat hampir semua perkara digital: music, video, gambar,
@@ -411,8 +411,8 @@
         buat pelan projek, dan terangkan topik sukar dengan cara mudah.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#chat">Cuba AI chat</a>
-        <a class="btn btn-secondary" href="#roadmap">Lihat pelan projek</a>
+        <a class="btn btn-primary" href="#chat">Cuba AI engine</a>
+        <a class="btn btn-secondary" href="#features">Lihat engine</a>
       </div>
       <div class="metrics" aria-label="Ringkasan projek">
         <div class="metric"><strong>RM0</strong><span>Kos hosting</span></div>
@@ -425,7 +425,7 @@
       <div class="chat-top">
         <div>
           <strong>Tukuk Assistant</strong>
-          <span>Client-side AI demo</span>
+          <span>Engine percuma: prompt, generator, planner, coder</span>
         </div>
         <span class="status">Online</span>
       </div>
@@ -450,23 +450,24 @@
 
   <main class="page">
     <section id="features">
-      <h2 class="section-title">Ciri projek</h2>
+      <h2 class="section-title">Engine percuma dalam browser</h2>
       <p class="section-copy">
-        Projek ini sesuai untuk portfolio, demo AI, laman peribadi, atau asas web app yang lebih besar.
-        Tiada database diperlukan untuk versi percuma ini.
+        Versi ini tidak bergantung pada API berbayar. Ia menggunakan engine ringkas client-side:
+        pengesanan kategori, template generator, random idea engine, prompt builder, planner,
+        dan mini coder untuk hasilkan output terus dalam chat.
       </p>
       <div class="cards">
         <article class="card">
-          <h3>Multimedia</h3>
-          <p>Bantu hasilkan idea music, konsep video, prompt gambar, storyboard, lirik, dan skrip pendek.</p>
+          <h3>Music engine</h3>
+          <p>Hasilkan konsep lagu, lirik, chord, struktur verse-chorus, dan prompt muzik.</p>
         </article>
         <article class="card">
-          <h3>Belajar dan menulis</h3>
-          <p>Terangkan topik, buat nota, ringkaskan idea, tulis artikel, caption, email, dan dokumen.</p>
+          <h3>Visual engine</h3>
+          <p>Hasilkan prompt gambar, konsep logo, palet warna, gaya visual, dan idea lukisan.</p>
         </article>
         <article class="card">
-          <h3>Melukis, projek, coding</h3>
-          <p>Bantu lukis konsep, susun projek, tulis kod, debug, buat roadmap, dan deploy web app.</p>
+          <h3>Coding engine</h3>
+          <p>Hasilkan struktur fail, contoh HTML/CSS/JS, checklist debugging, dan pelan projek.</p>
         </article>
       </div>
     </section>
@@ -474,7 +475,7 @@
     <section id="roadmap">
       <h2 class="section-title">Pelankan projek</h2>
       <p class="section-copy">
-        Gunakan pelan ini untuk kembangkan projek dari demo statik kepada web AI sebenar.
+        Gunakan pelan ini untuk kembangkan projek dari demo statik kepada AI studio sebenar.
       </p>
       <div class="workspace">
         <div class="panel">
@@ -524,27 +525,105 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const responses = {
-      idea: 'Cadangan projek AI: assistant peribadi untuk idea web, portfolio automatik, chatbot khidmat pelanggan, generator caption, atau dashboard ringkasan dokumen. Mulakan dengan MVP satu halaman.',
-      struktur: 'Struktur cadangan: index.html untuk UI utama, assets/app.js untuk logik chat, assets/style.css untuk reka bentuk, docs/roadmap.html untuk dokumentasi, dan CNAME jika guna domain custom.',
-      deploy: 'Untuk GitHub Pages, buka Settings > Pages, pilih branch gh-pages atau main ikut konfigurasi repo, kemudian tunggu URL aktif. Pastikan fail utama bernama index.html.',
-      api: 'Untuk AI sebenar, jangan letak API key dalam browser. Buat Cloudflare Worker atau backend kecil, panggil model AI di sana, lalu sambungkan web statik ke endpoint itu.',
-      music: 'Boleh. Untuk music, AI boleh bantu buat lirik, konsep genre, chord progression, struktur lagu, prompt untuk generator muzik, dan pelan produksi audio.',
-      video: 'Boleh. Untuk video, AI boleh bantu tulis skrip, storyboard, shot list, caption, idea thumbnail, prompt scene, dan jadual editing.',
-      gambar: 'Boleh. Untuk gambar, AI boleh bantu tulis prompt visual, tentukan gaya, warna, komposisi, aspek ratio, dan variasi idea untuk ilustrasi atau logo.',
-      belajar: 'Boleh. Untuk belajar, AI boleh terangkan topik langkah demi langkah, buat latihan, kuiz, ringkasan, nota, dan contoh mudah.',
-      menulis: 'Boleh. Untuk menulis, AI boleh bantu tulis artikel, cerita, caption, email, skrip, proposal, dokumentasi, dan pembetulan bahasa.',
-      melukis: 'Boleh. Untuk melukis, AI boleh bantu idea komposisi, gaya visual, palet warna, perspektif, konsep watak, dan prompt untuk alat lukisan digital.',
-      projek: 'Boleh. Untuk buat projek, AI boleh susun idea, MVP, roadmap, struktur fail, tugas mingguan, risiko, dan checklist deployment.',
-      coding: 'Boleh. Untuk coding, AI boleh bantu tulis kod, debug, explain error, buat komponen, sambung API, tulis CSS, dan sediakan struktur projek.',
-      default: 'Boleh. AI ini boleh bantu semua jenis kerja digital: music, video, gambar, belajar, menulis, melukis, buat projek, dan coding. Beritahu apa yang anda mahu hasilkan.'
-    };
-
     const greetings = [
-      'Hai! Saya Tukuk Assistant. Apa yang anda mahu bina hari ini?',
-      'Boleh. Tanya idea AI, struktur fail, atau cara deploy GitHub Pages.',
-      'Saya sedia bantu susun projek web AI percuma ini.'
+      'Hai! Saya Tukuk Assistant. Pilih music, video, gambar, belajar, menulis, melukis, projek, atau coding.',
+      'Saya ada engine percuma client-side untuk buat prompt, lirik, idea visual, kod, dan pelan projek.',
+      'Tulis apa yang anda mahu buat, contoh: buat lagu pop tentang malam, buat gambar robot comel, atau buat projek web AI.'
     ];
+
+    const musicStyles = ['lo-fi', 'pop', 'hip-hop', 'EDM', 'akustik', 'rock', 'cinematic', 'jazz'];
+    const visualStyles = ['cyberpunk', 'minimal', 'watercolor', '3D render', 'anime', 'flat design', 'pixel art', 'realistic'];
+    const projectTypes = ['web app', 'mobile app', 'portfolio', 'dashboard', 'game', 'bot', 'landing page'];
+    const codeStacks = ['HTML/CSS/JS', 'React', 'Vue', 'Node.js', 'Python', 'PHP', 'WordPress'];
+
+    function pick(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function titleCase(text) {
+      return text.replace(/\b\w/g, (letter) => letter.toUpperCase());
+    }
+
+    function extractTopic(text, fallback) {
+      const cleaned = text
+        .replace(/^(buat|hasilkan|cipta|tulis|lukis|design|designkan|generate|bagi|nak|minta)\s+/i, '')
+        .replace(/[.!?]+$/g, '')
+        .trim();
+      return cleaned || fallback;
+    }
+
+    function formatList(items) {
+      return items.map((item, index) => `${index + 1}. ${item}`).join('\n');
+    }
+
+    function buildMusic(topic) {
+      const style = pick(musicStyles);
+      const title = extractTopic(topic, 'lagu AI original');
+      return `🎵 Music Engine\n\nJudul: ${titleCase(title)}\nGenre: ${style}\nTempo: ${pick(['72 BPM', '86 BPM', '96 BPM', '110 BPM', '128 BPM'])}\nMood: ${pick(['tenang', 'semangat', 'futuristik', 'emosi', 'ceria'])}\n\nStruktur lagu:\n1. Intro 4 bar\n2. Verse 1\n3. Pre-chorus\n4. Chorus\n5. Verse 2\n6. Bridge\n7. Final chorus\n\nContoh lirik hook:\n"${title}, cahaya dalam malam,\nAI bantu kita terbang lebih tinggi,\nsetiap idea jadi irama,\nsetiap mimpi mula bernyanyi."\n\nChord cadangan:\nAm - F - C - G\n\nPrompt untuk generator muzik:\nBuat muzik ${style} tentang "${title}", mood ${pick(['hangat', 'bersih', 'sinematik', 'ceria'])}, tempo sederhana, sesuai untuk video pendek.`;
+    }
+
+    function buildVideo(topic) {
+      const title = extractTopic(topic, 'video pendek AI');
+      return `🎬 Video Engine\n\nTajuk: ${titleCase(title)}\nFormat: video pendek 30-60 saat\nGaya: ${pick(['cinematic', 'clean tutorial', 'dynamic montage', 'storytelling'])}\n\nStoryboard:\n1. Hook 0-3 saat: tunjuk masalah atau idea utama.\n2. Intro 3-8 saat: perkenalkan topik.\n3. Isi 8-40 saat: tunjuk 3 manfaat atau langkah.\n4. Climax 40-50 saat: hasil akhir atau demo.\n5. CTA 50-60 saat: ajak follow, cuba, atau baca.\n\nSkrip ringkas:\n"Pernah fikir nak buat ${title} dengan cepat? Di sini saya tunjuk idea mudah, langkah utama, dan hasil akhir yang boleh anda kembangkan."\n\nPrompt visual:\nBuat video pendek gaya ${pick(['modern', 'clean', 'futuristic', 'warm'])} tentang "${title}", warna terang, teks besar, muzik ringan, sesuai untuk TikTok, Reels, dan YouTube Shorts.`;
+    }
+
+    function buildImage(topic) {
+      const title = extractTopic(topic, 'gambar AI menarik');
+      const style = pick(visualStyles);
+      return `🖼️ Gambar Engine\n\nTema: ${titleCase(title)}\nGaya visual: ${style}\nKomposisi: ${pick(['center subject', 'wide shot', 'portrait', 'isometric', 'cinematic angle'])}\nPalet warna: ${pick(['neon blue + green', 'pastel soft', 'black + gold', 'earth tone', 'purple + pink'])}\n\nPrompt gambar:\nBuat imej "${title}" dalam gaya ${style}, komposisi ${pick(['bersih dan profesional', 'dramatik dan tajam', 'lembut dan artistik'])}, pencahayaan ${pick(['studio lighting', 'golden hour', 'neon glow', 'soft natural light'])}, detail tinggi, sesuai untuk poster web atau thumbnail.\n\nVariasi idea:\n1. Versi minimalis untuk logo.\n2. Versi poster untuk promosi.\n3. Versi thumbnail YouTube.\n4. Versi wallpaper desktop.\n5. Versi ilustrasi cerita.`;
+    }
+
+    function buildDrawing(topic) {
+      const title = extractTopic(topic, 'lukisan digital');
+      return `🎨 Melukis Engine\n\nIdea: ${titleCase(title)}\nGaya: ${pick(['anime', 'realistic', 'cartoon', 'sketch', 'watercolor', 'cyberpunk'])}\nPerspektif: ${pick(['3/4 view', 'front view', 'isometric', 'top view', 'dynamic angle'])}\n\nLangkah melukis:\n1. Buat bentuk asas dengan garisan ringkas.\n2. Tentukan siluet utama.\n3. Tambah wajah, objek, atau elemen penting.\n4. Letakkan sumber cahaya.\n5. Tambah bayang kasar.\n6. Masukkan warna utama.\n7. Tambah highlight dan detail akhir.\n\nPrompt lukisan:\nLukis "${title}" dengan gaya ${pick(['bersih', 'dinamik', 'lembut', 'futuristik'])}, fokus pada bentuk jelas, warna menarik, dan komposisi mudah difahami.`;
+    }
+
+    function buildStudy(topic) {
+      const title = extractTopic(topic, 'topik yang dipelajari');
+      return `📚 Belajar Engine\n\nTopik: ${titleCase(title)}\n\nPenjelasan ringkas:\nMulakan dengan definisi mudah, kemudian pecahkan kepada bahagian kecil. Fahami konsep asas, lihat contoh, buat latihan, dan ulang dengan bahasa sendiri.\n\nPelan belajar 30 minit:\n1. 5 minit: baca definisi.\n2. 10 minit: fahami konsep utama.\n3. 10 minit: buat contoh kecil.\n4. 5 minit: buat ringkasan.\n\nKuiz pantas:\n1. Apakah tujuan utama topik ini?\n2. Apakah 3 bahagian penting?\n3. Berikan satu contoh mudah.\n4. Apakah kesilapan biasa?\n\nNota ringkas:\nTopik ini lebih mudah jika dipelajari secara langkah demi langkah, bukan hafal terus.`;
+    }
+
+    function buildWriting(topic) {
+      const title = extractTopic(topic, 'artikel menarik');
+      return `✍️ Menulis Engine\n\nTajuk: ${titleCase(title)}\nFormat: artikel pendek / caption / email / skrip\n\nStruktur penulisan:\n1. Hook: mula dengan ayat yang menarik.\n2. Masalah: terangkan isu atau keperluan.\n3. Solusi: beri idea atau langkah.\n4. Contoh: tunjuk aplikasi sebenar.\n5. CTA: ajak pembaca bertindak.\n\nContoh pembuka:\n"Dalam dunia digital sekarang, ${title} bukan sekadar idea tambahan, tetapi cara mudah untuk buat kerja lebih pantas, jelas, dan kreatif."\n\nAyat penutup:\n"Mulakan dengan versi kecil, uji, perbaiki, dan jadikan ia lebih baik setiap hari."`;
+    }
+
+    function buildProject(topic) {
+      const title = extractTopic(topic, 'projek digital');
+      const type = pick(projectTypes);
+      return `🚀 Projek Engine\n\nNama projek: ${titleCase(title)}\nJenis: ${type}\n\nMVP:\n1. Satu halaman utama.\n2. Satu fungsi utama.\n3. Simpan data asas jika perlu.\n4. Deploy percuma.\n5. Dapatkan feedback awal.\n\nStruktur fail:\nproject/\n  index.html\n  assets/app.js\n  assets/style.css\n  README.md\n\nRoadmap 7 hari:\n1. Hari 1: tulis idea dan skop.\n2. Hari 2: buat UI ringkas.\n3. Hari 3: tambah fungsi utama.\n4. Hari 4: uji pada telefon.\n5. Hari 5: tambah halaman dokumentasi.\n6. Hari 6: deploy.\n7. Hari 7: perbaiki UX.\n\nChecklist:\n- Nama jelas\n- Fungsi utama ada\n- UI mudah\n- Mobile friendly\n- Deploy GitHub Pages`;
+    }
+
+    function buildCoding(topic) {
+      const title = extractTopic(topic, 'web app ringkas');
+      const stack = pick(codeStacks);
+      return `💻 Coding Engine\n\nProjek: ${titleCase(title)}\nStack: ${stack}\n\nStruktur fail:\nindex.html\nstyle.css\napp.js\nREADME.md\n\nContoh fungsi utama:\n- Input pengguna\n- Proses data\n- Papar hasil\n- Simpan dalam localStorage jika perlu\n\nContoh HTML ringkas:\n<div class="app">\n  <input id="input" placeholder="Tulis sesuatu">\n  <button id="btn">Hasilkan</button>\n  <output id="result"></output>\n</div>\n\nContoh JavaScript:\nconst input = document.querySelector("#input");\nconst btn = document.querySelector("#btn");\nconst result = document.querySelector("#result");\n\nbtn.addEventListener("click", () => {\n  result.textContent = "Hasil: " + input.value;\n});\n\nLangkah seterusnya:\n1. Buat fail.\n2. Tambah CSS.\n3. Uji fungsi.\n4. Deploy ke GitHub Pages.`;
+    }
+
+    function buildGeneral(topic) {
+      return `🤖 AI General Engine\n\nAnda minta: ${topic}\n\nSaya boleh bantu pecahkan kepada:\n${formatList([
+        'Tujuan utama',
+        'Langkah paling mudah untuk mula',
+        'Alat percuma yang sesuai',
+        'Prompt yang boleh digunakan',
+        'Checklist hasil akhir'
+      ])}\n\nCadangan seterusnya:\nTulis lebih spesifik, contoh: "buat music tentang hujan", "buat gambar kucing cyberpunk", "buat projek web AI", atau "tulis kod landing page".`;
+    }
+
+    function generateResponse(prompt) {
+      const lower = prompt.toLowerCase();
+      const topic = extractTopic(prompt, 'idea anda');
+
+      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio') || lower.includes('nyanyi')) return buildMusic(topic);
+      if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard') || lower.includes('reels') || lower.includes('shorts')) return buildVideo(topic);
+      if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi') || lower.includes('poster') || lower.includes('thumbnail')) return buildImage(topic);
+      if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik') || lower.includes('ajar')) return buildStudy(topic);
+      if (lower.includes('tulis') || lower.includes('artikel') || lower.includes('cerita') || lower.includes('email') || lower.includes('caption') || lower.includes('skrip')) return buildWriting(topic);
+      if (lower.includes('lukis') || lower.includes('melukis') || lower.includes('gaya visual') || lower.includes('komposisi') || lower.includes('seni')) return buildDrawing(topic);
+      if (lower.includes('projek') || lower.includes('bisnes') || lower.includes('mvp') || lower.includes('roadmap')) return buildProject(topic);
+      if (lower.includes('coding') || lower.includes('code') || lower.includes('kod') || lower.includes('debug') || lower.includes('program') || lower.includes('html') || lower.includes('javascript')) return buildCoding(topic);
+      return buildGeneral(topic);
+    }
 
     function addMessage(text, role) {
       const item = document.createElement('div');
@@ -563,22 +642,6 @@
       messages.scrollTop = messages.scrollHeight;
     }
 
-    function generateResponse(prompt) {
-      const lower = prompt.toLowerCase();
-      if (lower.includes('idea') || lower.includes('projek')) return responses.idea;
-      if (lower.includes('struktur') || lower.includes('fail')) return responses.struktur;
-      if (lower.includes('deploy') || lower.includes('github') || lower.includes('pages')) return responses.deploy;
-      if (lower.includes('api') || lower.includes('model')) return responses.api;
-      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio')) return responses.music;
-      if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard')) return responses.video;
-      if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi')) return responses.gambar;
-      if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik')) return responses.belajar;
-      if (lower.includes('tulis') || lower.includes('artikel') || lower.includes('cerita') || lower.includes('email') || lower.includes('caption')) return responses.menulis;
-      if (lower.includes('lukis') || lower.includes('melukis') || lower.includes('gaya visual') || lower.includes('komposisi')) return responses.melukis;
-      if (lower.includes('coding') || lower.includes('code') || lower.includes('kod') || lower.includes('debug') || lower.includes('program')) return responses.coding;
-      return responses.default;
-    }
-
     function showToast(text) {
       toast.textContent = text;
       toast.classList.add('show');
@@ -594,12 +657,14 @@
       promptInput.value = '';
       promptInput.style.height = 'auto';
       sendButton.disabled = true;
+      sendButton.textContent = 'Proses';
 
       window.setTimeout(() => {
         addMessage(generateResponse(text), 'ai');
         sendButton.disabled = false;
+        sendButton.textContent = 'Hantar';
         promptInput.focus();
-      }, 520);
+      }, 420);
     }
 
     sendButton.addEventListener('click', sendPrompt);
@@ -618,9 +683,9 @@
 
     document.querySelectorAll('.quick button').forEach((button) => {
       button.addEventListener('click', () => {
-        promptInput.value = button.textContent;
+        promptInput.value = `${button.textContent} tentang projek AI Tukuk`;
         promptInput.focus();
-        showToast('Soalan cadangan dimasukkan');
+        showToast('Engine dipilih');
       });
     });
 
