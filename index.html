@@ -402,12 +402,13 @@
 
   <div class="page hero" id="top">
     <div>
-      <div class="eyebrow">Projek AI web percuma untuk GitHub Pages</div>
-      <h1>Bina, uji, dan tunjuk <span class="gradient-text">idea AI</span> dalam satu web app</h1>
+      <div class="eyebrow">AI serba boleh untuk semua projek anda</div>
+      <h1>AI untuk buat <span class="gradient-text">semua jenis karya</span></h1>
       <p class="hero-copy">
-        Laman ini adalah permulaan projek AI untuk Tukuk: chat assistant, generator idea,
-        pelan projek, dan panel dokumentasi ringkas. Semua berjalan sebagai fail statik
-        supaya boleh dihoskan percuma di GitHub Pages.
+        AI ini direka untuk bantu anda buat hampir semua perkara digital: music, video, gambar,
+        belajar, menulis, melukis, buat projek, coding, idea bisnes, automasi, dan dokumentasi.
+        Ia boleh jadi assistant peribadi untuk susun idea, tulis prompt, hasilkan kod,
+        buat pelan projek, dan terangkan topik sukar dengan cara mudah.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#chat">Cuba AI chat</a>
@@ -431,13 +432,17 @@
       <div class="messages" id="messages"></div>
       <div class="composer">
         <div class="input-row">
-          <textarea id="promptInput" rows="2" placeholder="Tanya idea projek AI, struktur fail, atau cara deploy..."></textarea>
+          <textarea id="promptInput" rows="2" placeholder="Minta AI bantu buat music, video, gambar, belajar, menulis, melukis, projek, atau coding..."></textarea>
           <button class="send" id="sendButton" type="button">Hantar</button>
         </div>
         <div class="quick" aria-label="Cadangan soalan">
-          <button type="button">Idea projek AI</button>
-          <button type="button">Struktur fail</button>
-          <button type="button">Deploy GitHub Pages</button>
+          <button type="button">Buat music</button>
+          <button type="button">Buat video</button>
+          <button type="button">Buat gambar</button>
+          <button type="button">Belajar coding</button>
+          <button type="button">Tulis artikel</button>
+          <button type="button">Lukis idea</button>
+          <button type="button">Buat projek</button>
         </div>
       </div>
     </aside>
@@ -452,16 +457,16 @@
       </p>
       <div class="cards">
         <article class="card">
-          <h3>AI chat demo</h3>
-          <p>Antaramuka chat moden dengan respons berasaskan kata kunci untuk demo pantas.</p>
+          <h3>Multimedia</h3>
+          <p>Bantu hasilkan idea music, konsep video, prompt gambar, storyboard, lirik, dan skrip pendek.</p>
         </article>
         <article class="card">
-          <h3>Generator idea</h3>
-          <p>Bantu susun idea projek AI, ciri MVP, dan langkah seterusnya tanpa server.</p>
+          <h3>Belajar dan menulis</h3>
+          <p>Terangkan topik, buat nota, ringkaskan idea, tulis artikel, caption, email, dan dokumen.</p>
         </article>
         <article class="card">
-          <h3>GitHub Pages ready</h3>
-          <p>Hanya fail statik. Push ke branch Pages dan laman terus boleh diakses.</p>
+          <h3>Melukis, projek, coding</h3>
+          <p>Bantu lukis konsep, susun projek, tulis kod, debug, buat roadmap, dan deploy web app.</p>
         </article>
       </div>
     </section>
@@ -524,7 +529,15 @@
       struktur: 'Struktur cadangan: index.html untuk UI utama, assets/app.js untuk logik chat, assets/style.css untuk reka bentuk, docs/roadmap.html untuk dokumentasi, dan CNAME jika guna domain custom.',
       deploy: 'Untuk GitHub Pages, buka Settings > Pages, pilih branch gh-pages atau main ikut konfigurasi repo, kemudian tunggu URL aktif. Pastikan fail utama bernama index.html.',
       api: 'Untuk AI sebenar, jangan letak API key dalam browser. Buat Cloudflare Worker atau backend kecil, panggil model AI di sana, lalu sambungkan web statik ke endpoint itu.',
-      default: 'Saya faham. Untuk projek ini, kita boleh mulakan dengan chat demo, halaman ciri, pelan projek, dan hosting percuma di GitHub Pages.'
+      music: 'Boleh. Untuk music, AI boleh bantu buat lirik, konsep genre, chord progression, struktur lagu, prompt untuk generator muzik, dan pelan produksi audio.',
+      video: 'Boleh. Untuk video, AI boleh bantu tulis skrip, storyboard, shot list, caption, idea thumbnail, prompt scene, dan jadual editing.',
+      gambar: 'Boleh. Untuk gambar, AI boleh bantu tulis prompt visual, tentukan gaya, warna, komposisi, aspek ratio, dan variasi idea untuk ilustrasi atau logo.',
+      belajar: 'Boleh. Untuk belajar, AI boleh terangkan topik langkah demi langkah, buat latihan, kuiz, ringkasan, nota, dan contoh mudah.',
+      menulis: 'Boleh. Untuk menulis, AI boleh bantu tulis artikel, cerita, caption, email, skrip, proposal, dokumentasi, dan pembetulan bahasa.',
+      melukis: 'Boleh. Untuk melukis, AI boleh bantu idea komposisi, gaya visual, palet warna, perspektif, konsep watak, dan prompt untuk alat lukisan digital.',
+      projek: 'Boleh. Untuk buat projek, AI boleh susun idea, MVP, roadmap, struktur fail, tugas mingguan, risiko, dan checklist deployment.',
+      coding: 'Boleh. Untuk coding, AI boleh bantu tulis kod, debug, explain error, buat komponen, sambung API, tulis CSS, dan sediakan struktur projek.',
+      default: 'Boleh. AI ini boleh bantu semua jenis kerja digital: music, video, gambar, belajar, menulis, melukis, buat projek, dan coding. Beritahu apa yang anda mahu hasilkan.'
     };
 
     const greetings = [
@@ -556,6 +569,13 @@
       if (lower.includes('struktur') || lower.includes('fail')) return responses.struktur;
       if (lower.includes('deploy') || lower.includes('github') || lower.includes('pages')) return responses.deploy;
       if (lower.includes('api') || lower.includes('model')) return responses.api;
+      if (lower.includes('music') || lower.includes('lagu') || lower.includes('lirik') || lower.includes('audio')) return responses.music;
+      if (lower.includes('video') || lower.includes('skrip') || lower.includes('storyboard')) return responses.video;
+      if (lower.includes('gambar') || lower.includes('image') || lower.includes('logo') || lower.includes('ilustrasi')) return responses.gambar;
+      if (lower.includes('belajar') || lower.includes('nota') || lower.includes('kuiz') || lower.includes('topik')) return responses.belajar;
+      if (lower.includes('tulis') || lower.includes('artikel') || lower.includes('cerita') || lower.includes('email') || lower.includes('caption')) return responses.menulis;
+      if (lower.includes('lukis') || lower.includes('melukis') || lower.includes('gaya visual') || lower.includes('komposisi')) return responses.melukis;
+      if (lower.includes('coding') || lower.includes('code') || lower.includes('kod') || lower.includes('debug') || lower.includes('program')) return responses.coding;
       return responses.default;
     }
 
