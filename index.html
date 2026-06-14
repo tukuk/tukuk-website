@@ -154,15 +154,54 @@
     .metric span { color: var(--muted); font-size: 0.86rem; }
 
     .chat-card {
+      position: relative;
       border: 1px solid var(--line);
       border-radius: 28px;
       background: var(--panel);
       box-shadow: var(--shadow);
       backdrop-filter: blur(22px);
-      overflow: hidden;
+      overflow: visible;
+      resize: both;
+      min-width: 340px;
+      min-height: 520px;
+      max-width: 960px;
+      max-height: 760px;
+      cursor: move;
+    }
+    .chat-card.resizing {
+      cursor: nwse-resize;
+    }
+    .chat-card.dragging {
+      user-select: none;
+    }
+    .chat-handle {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 5;
+      display: flex;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .chat-handle span {
+      pointer-events: auto;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(2, 6, 23, 0.72);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+    .chat-handle span:hover {
+      color: var(--text);
+      border-color: rgba(56, 189, 248, 0.35);
     }
     .chat-top {
-      padding: 18px;
+      padding: 18px 70px 18px 18px;
       border-bottom: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
@@ -276,6 +315,25 @@
     #audioPlayer {
       width: 100%;
       margin-top: 10px;
+    }
+    .tools-panel {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .tool-btn {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.68);
+      border-radius: 14px;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .tool-btn:hover {
+      border-color: rgba(34, 197, 94, 0.35);
+      background: rgba(34, 197, 94, 0.1);
     }
     .composer { padding: 16px; border-top: 1px solid var(--line); background: rgba(2, 6, 23, 0.35); }
     .input-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
@@ -443,8 +501,8 @@
       <p class="hero-copy">
         AI ini direka untuk bantu anda buat hampir semua perkara digital: music, video, gambar,
         belajar, menulis, melukis, buat projek, coding, idea bisnes, automasi, dan dokumentasi.
-        Ia boleh jadi assistant peribadi untuk susun idea, tulis prompt, hasilkan kod,
-        buat pelan projek, dan terangkan topik sukar dengan cara mudah.
+        Chat boleh digerakkan, dibesarkan, dikecilkan, disimpan, dibaca dengan suara, dan disokong
+        oleh alat open-source browser seperti Web Audio API, Canvas, Speech API, dan localStorage.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#chat">Cuba AI engine</a>
@@ -458,6 +516,10 @@
     </div>
 
     <aside class="chat-card" id="chat" aria-label="AI chat demo">
+      <div class="chat-handle" aria-label="Kawalan chat">
+        <span id="resetChat" title="Reset posisi">⌂</span>
+        <span id="toggleTools" title="Tools">⚙</span>
+      </div>
       <div class="chat-top">
         <div>
           <strong>Tukuk Assistant</strong>
@@ -473,6 +535,12 @@
         </div>
         <canvas id="visualCanvas" width="640" height="260"></canvas>
         <audio id="audioPlayer" controls></audio>
+      </div>
+      <div class="tools-panel" id="toolsPanel" hidden>
+        <button class="tool-btn" id="speakButton" type="button">Bacakan jawapan</button>
+        <button class="tool-btn" id="voiceButton" type="button">Suara ke teks</button>
+        <button class="tool-btn" id="downloadButton" type="button">Download chat</button>
+        <button class="tool-btn" id="clearButton" type="button">Reset chat</button>
       </div>
       <div class="composer">
         <div class="input-row">
@@ -513,6 +581,10 @@
         <article class="card">
           <h3>Coding engine</h3>
           <p>Hasilkan struktur fail, contoh HTML/CSS/JS, checklist debugging, dan pelan projek.</p>
+        </article>
+        <article class="card">
+          <h3>Open-source tools</h3>
+          <p>Gunakan Web Audio API, Canvas, Speech API, localStorage, dan download chat tanpa kos.</p>
         </article>
       </div>
     </section>
@@ -573,6 +645,14 @@
     const audioPlayer = document.getElementById('audioPlayer');
     const canvas = document.getElementById('visualCanvas');
     const ctx = canvas.getContext('2d');
+    const chatCard = document.getElementById('chat');
+    const resetChat = document.getElementById('resetChat');
+    const toggleTools = document.getElementById('toggleTools');
+    const toolsPanel = document.getElementById('toolsPanel');
+    const speakButton = document.getElementById('speakButton');
+    const voiceButton = document.getElementById('voiceButton');
+    const downloadButton = document.getElementById('downloadButton');
+    const clearButton = document.getElementById('clearButton');
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -856,6 +936,84 @@
       item.append(avatar, bubble);
       messages.appendChild(item);
       messages.scrollTop = messages.scrollHeight;
+      saveChat();
+    }
+
+    function saveChat() {
+      const history = Array.from(messages.querySelectorAll('.bubble')).map((bubble) => bubble.textContent);
+      localStorage.setItem('tukuk-ai-chat-history', JSON.stringify(history));
+    }
+
+    function loadChat() {
+      const saved = localStorage.getItem('tukuk-ai-chat-history');
+      if (!saved) return;
+      const history = JSON.parse(saved);
+      history.slice(0, 12).forEach((text) => addMessage(text, 'ai'));
+    }
+
+    function setupDraggableChat() {
+      let dragging = false;
+      let resizing = false;
+      let startX = 0;
+      let startY = 0;
+      let startLeft = 0;
+      let startTop = 0;
+      let startWidth = 0;
+      let startHeight = 0;
+
+      chatCard.addEventListener('pointerdown', (event) => {
+        if (event.target.closest('button, textarea, input, audio, canvas, .quick, .tool-btn')) return;
+        dragging = true;
+        chatCard.classList.add('dragging');
+        startX = event.clientX;
+        startY = event.clientY;
+        startLeft = chatCard.offsetLeft;
+        startTop = chatCard.offsetTop;
+        chatCard.setPointerCapture(event.pointerId);
+      });
+
+      chatCard.addEventListener('pointermove', (event) => {
+        if (!dragging && !resizing) return;
+        if (dragging) {
+          chatCard.style.left = `${startLeft + event.clientX - startX}px`;
+          chatCard.style.top = `${startTop + event.clientY - startY}px`;
+        }
+        if (resizing) {
+          chatCard.style.width = `${Math.max(340, startWidth + event.clientX - startX)}px`;
+          chatCard.style.height = `${Math.max(520, startHeight + event.clientY - startY)}px`;
+        }
+      });
+
+      chatCard.addEventListener('pointerup', (event) => {
+        dragging = false;
+        resizing = false;
+        chatCard.classList.remove('dragging');
+        chatCard.releasePointerCapture(event.pointerId);
+      });
+
+      chatCard.addEventListener('pointerdown', (event) => {
+        const rect = chatCard.getBoundingClientRect();
+        if (event.clientX > rect.right - 24 && event.clientY > rect.bottom - 24) {
+          resizing = true;
+          chatCard.classList.add('resizing');
+          startX = event.clientX;
+          startY = event.clientY;
+          startWidth = chatCard.offsetWidth;
+          startHeight = chatCard.offsetHeight;
+          chatCard.setPointerCapture(event.pointerId);
+        }
+      });
+
+      resetChat.addEventListener('click', () => {
+        chatCard.style.left = '';
+        chatCard.style.top = '';
+        chatCard.style.width = '';
+        chatCard.style.height = '';
+      });
+
+      toggleTools.addEventListener('click', () => {
+        toolsPanel.hidden = !toolsPanel.hidden;
+      });
     }
 
     function showToast(text) {
@@ -863,6 +1021,65 @@
       toast.classList.add('show');
       window.clearTimeout(showToast.timer);
       showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function getLastAiText() {
+      const items = Array.from(messages.querySelectorAll('.message.ai .bubble'));
+      return items.length ? items[items.length - 1].textContent : '';
+    }
+
+    function setupOpenSourceTools() {
+      speakButton.addEventListener('click', () => {
+        const text = getLastAiText();
+        if (!text) {
+          showToast('Tiada jawapan AI untuk dibacakan');
+          return;
+        }
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text.slice(0, 1800));
+        utterance.lang = detectLanguage(text).code;
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+        showToast('Teks AI sedang dibacakan');
+      });
+
+      voiceButton.addEventListener('click', async () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+          showToast('Browser ini tidak sokong speech recognition');
+          return;
+        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = detectLanguage(promptInput.value || 'ms-MY').code === 'ms' ? 'ms-MY' : 'en-US';
+        recognition.interimResults = false;
+        recognition.onresult = (event) => {
+          promptInput.value = event.results[0][0].transcript;
+          showToast('Suara ditukar ke teks');
+        };
+        recognition.start();
+      });
+
+      downloadButton.addEventListener('click', () => {
+        const text = Array.from(messages.querySelectorAll('.message')).map((message) => {
+          const role = message.classList.contains('user') ? 'Anda' : 'AI';
+          const bubble = message.querySelector('.bubble')?.textContent || '';
+          return `${role}: ${bubble}`;
+        }).join('\n\n');
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'tukuk-ai-chat.txt';
+        link.click();
+        URL.revokeObjectURL(url);
+        showToast('Chat telah dimuat turun');
+      });
+
+      clearButton.addEventListener('click', () => {
+        messages.innerHTML = '';
+        localStorage.removeItem('tukuk-ai-chat-history');
+        showToast('Chat telah dipadam');
+      });
     }
 
     async function sendPrompt() {
@@ -914,6 +1131,9 @@
       audioPlayer.pause();
     });
 
+    setupDraggableChat();
+    setupOpenSourceTools();
+    loadChat();
     addMessage(greetings[Math.floor(Math.random() * greetings.length)], 'ai');
   </script>
 </body>
