@@ -3,465 +3,608 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tukuk - Dashboard Rasmi</title>
-  <meta name="description" content="Dashboard rasmi Tukuk untuk website, subdomain, work mail, dan status infrastruktur.">
+  <title>Tukuk AI Studio</title>
+  <meta name="description" content="Projek web AI percuma oleh Tukuk untuk chat, idea projek, dan automasi web.">
+  <meta name="theme-color" content="#020617">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
       --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.82);
+      --bg-soft: #0f172a;
+      --panel: rgba(15, 23, 42, 0.76);
       --panel-strong: rgba(15, 23, 42, 0.96);
       --text: #e5e7eb;
       --muted: #94a3b8;
+      --line: rgba(148, 163, 184, 0.2);
       --accent: #38bdf8;
       --green: #22c55e;
-      --yellow: #facc15;
-      --red: #fb7185;
-      --border: rgba(148, 163, 184, 0.22);
+      --purple: #a78bfa;
+      --danger: #fb7185;
       --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.20), transparent 28%),
-        radial-gradient(circle at 88% 0%, rgba(34, 197, 94, 0.14), transparent 24%),
-        linear-gradient(135deg, #020617 0%, #0f172a 48%, #111827 100%);
+        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.2), transparent 28%),
+        radial-gradient(circle at 88% 0%, rgba(34, 197, 94, 0.16), transparent 26%),
+        radial-gradient(circle at 50% 100%, rgba(167, 139, 250, 0.14), transparent 34%),
+        var(--bg);
       color: var(--text);
       line-height: 1.65;
     }
 
     a { color: inherit; text-decoration: none; }
-
-    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
-
+    button, input, textarea, select { font: inherit; }
+    .page { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
     header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      border-bottom: 1px solid var(--border);
-      background: rgba(2, 6, 23, 0.76);
-      backdrop-filter: blur(16px);
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(18px);
     }
-
     nav {
+      min-height: 74px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 72px;
-      gap: 24px;
+      gap: 22px;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      font-size: 1.25rem;
-    }
-
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: -0.04em; }
     .logo {
-      display: grid;
-      place-items: center;
       width: 42px;
       height: 42px;
       border-radius: 15px;
+      display: grid;
+      place-items: center;
       background: linear-gradient(135deg, var(--accent), var(--green));
       color: #020617;
-      box-shadow: 0 12px 34px rgba(56, 189, 248, 0.24);
+      box-shadow: 0 12px 34px rgba(56, 189, 248, 0.22);
+      font-weight: 900;
     }
-
-    .links { display: flex; flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: 0.95rem; }
-    .links a:hover { color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.94rem; }
+    .nav-links a { padding: 9px 12px; border-radius: 999px; }
+    .nav-links a:hover { color: var(--text); background: rgba(148, 163, 184, 0.1); }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
-      gap: 34px;
-      align-items: stretch;
-      padding: 84px 0 52px;
+      grid-template-columns: 1fr 430px;
+      gap: 30px;
+      align-items: center;
+      padding: 58px 0 34px;
     }
-
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      margin-bottom: 18px;
-      padding: 7px 12px;
-      border: 1px solid var(--border);
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.72);
-      color: #bae6fd;
+      background: rgba(34, 197, 94, 0.08);
+      color: #bbf7d0;
       font-size: 0.9rem;
+      margin-bottom: 18px;
     }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.14);
-    }
-
     h1 {
       margin: 0;
-      max-width: 780px;
-      font-size: clamp(2.7rem, 8vw, 6.8rem);
-      line-height: 0.95;
+      font-size: clamp(2.55rem, 7vw, 5.8rem);
+      line-height: 0.96;
       letter-spacing: -0.08em;
     }
-
-    .gradient {
-      background: linear-gradient(135deg, #e0f2fe, #7dd3fc 38%, #86efac);
+    .gradient-text {
+      background: linear-gradient(135deg, #7dd3fc, #86efac 48%, #c4b5fd);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-
-    .lead { max-width: 700px; margin: 24px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); }
-
-    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
-
-    .button {
+    .hero-copy {
+      max-width: 720px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-weight: 800;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.72);
-      color: var(--text);
-      font-weight: 800;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
-
-    .button.primary {
-      border-color: transparent;
-      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
       color: #020617;
-      box-shadow: 0 18px 40px rgba(14, 165, 233, 0.22);
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      box-shadow: 0 16px 42px rgba(34, 197, 94, 0.18);
     }
+    .btn-secondary {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.72);
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 34px;
+      max-width: 650px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(15, 23, 42, 0.52);
+      backdrop-filter: blur(18px);
+    }
+    .metric strong { display: block; font-size: 1.35rem; letter-spacing: -0.04em; }
+    .metric span { color: var(--muted); font-size: 0.86rem; }
 
-    .card, .panel {
-      position: relative;
-      overflow: hidden;
-      padding: 24px;
-      border: 1px solid var(--border);
-      border-radius: 26px;
+    .chat-card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
       background: var(--panel);
       box-shadow: var(--shadow);
-    }
-
-    .panel { background: var(--panel-strong); }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), transparent 34%);
-      pointer-events: none;
-    }
-
-    .terminal {
-      position: relative;
-      margin-top: 18px;
+      backdrop-filter: blur(22px);
       overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      border-radius: 18px;
-      background: #020617;
     }
-
-    .bar {
-      display: flex;
-      gap: 7px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .bar span { width: 11px; height: 11px; border-radius: 999px; background: #f87171; }
-    .bar span:nth-child(2) { background: #facc15; }
-    .bar span:nth-child(3) { background: #4ade80; }
-
-    pre {
-      margin: 0;
+    .chat-top {
       padding: 18px;
-      overflow: auto;
-      color: #bae6fd;
-      font-size: 0.9rem;
-      line-height: 1.7;
-    }
-
-    section { padding: 42px 0; }
-
-    .section-title {
-      margin-bottom: 22px;
-      font-size: clamp(1.9rem, 4vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: -0.05em;
-    }
-
-    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-
-    .feature {
-      padding: 22px;
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      background: var(--panel);
-    }
-
-    .feature strong { display: block; margin-bottom: 8px; font-size: 1.05rem; }
-    .feature p { margin: 0; color: var(--muted); }
-
-    .split { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 22px; align-items: stretch; }
-
-    .panel h3 { margin: 0 0 12px; font-size: 1.3rem; }
-    .panel p, .panel li { color: var(--muted); }
-    ul { margin: 0; padding-left: 20px; }
-
-    code {
-      padding: 0.18em 0.38em;
-      border-radius: 8px;
-      background: rgba(56, 189, 248, 0.12);
-      color: #bae6fd;
-      word-break: break-all;
-    }
-
-    .status {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .status-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
       align-items: center;
-      padding: 13px 14px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(15, 23, 42, 0.62);
     }
-
-    .status-row strong { display: block; }
-    .status-row span { color: var(--muted); font-size: 0.92rem; }
-
-    .badge {
+    .chat-top strong { display: block; letter-spacing: -0.03em; }
+    .chat-top span { display: block; margin-top: 2px; color: var(--muted); font-size: 0.82rem; }
+    .status {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 5px 10px;
-      border-radius: 999px;
+      color: #bbf7d0;
       font-size: 0.82rem;
-      font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      white-space: nowrap;
+    }
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+    .messages {
+      min-height: 365px;
+      max-height: 520px;
+      overflow: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message { display: flex; gap: 10px; align-items: flex-start; animation: pop 180ms ease; }
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+    .avatar.user {
+      background: rgba(56, 189, 248, 0.16);
+      color: #bae6fd;
+      border: 1px solid rgba(56, 189, 248, 0.22);
+    }
+    .avatar.ai {
+      background: rgba(34, 197, 94, 0.14);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.22);
+    }
+    .bubble {
+      max-width: min(620px, 78%);
+      padding: 12px 14px;
+      border-radius: 18px;
+      line-height: 1.55;
+      font-size: 0.94rem;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.72);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .message.user { flex-direction: row-reverse; }
+    .message.user .bubble {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.22), rgba(34, 197, 94, 0.16));
+      border-color: rgba(56, 189, 248, 0.22);
+    }
+    .composer { padding: 16px; border-top: 1px solid var(--line); background: rgba(2, 6, 23, 0.35); }
+    .input-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+    textarea {
+      width: 100%;
+      resize: none;
+      min-height: 48px;
+      max-height: 150px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px 14px;
+      outline: none;
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.82);
+    }
+    textarea:focus {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.08);
+    }
+    .send {
+      min-width: 96px;
+      border-radius: 18px;
+      color: #020617;
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      border: 0;
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .send:disabled { opacity: 0.55; cursor: not-allowed; }
+    .quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .quick button {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.55);
+      border-radius: 999px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+    .quick button:hover { color: var(--text); border-color: rgba(56, 189, 248, 0.35); }
+
+    main { padding: 26px 0 10px; }
+    section { padding: 42px 0; }
+    .section-title { margin: 0 0 16px; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.06em; }
+    .section-copy { color: var(--muted); line-height: 1.75; max-width: 790px; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(18px);
+    }
+    .card h3 { margin: 0 0 8px; letter-spacing: -0.03em; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.65; font-size: 0.94rem; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+    .panel h3 { margin: 0 0 14px; letter-spacing: -0.03em; }
+    .todo {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .todo li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.22);
+    }
+    .todo b { color: var(--text); }
+    .code {
+      width: 100%;
+      overflow: auto;
+      margin: 0;
+      padding: 16px;
+      border-radius: 18px;
+      color: #d1fae5;
+      background: #020617;
+      border: 1px solid var(--line);
+      font-size: 0.88rem;
+      line-height: 1.6;
     }
 
-    .ok { color: #bbf7d0; background: rgba(34, 197, 94, 0.14); border: 1px solid rgba(34, 197, 94, 0.35); }
-    .warn { color: #fef08a; background: rgba(250, 204, 21, 0.13); border: 1px solid rgba(250, 204, 21, 0.35); }
-    .bad { color: #fecdd3; background: rgba(251, 113, 133, 0.14); border: 1px solid rgba(251, 113, 133, 0.35); }
+    footer {
+      margin-top: 28px;
+      padding: 34px 0 48px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
 
-    footer { padding: 38px 0 56px; color: var(--muted); border-top: 1px solid var(--border); }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 30;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
-    @media (max-width: 880px) {
-      .hero, .split, .grid { grid-template-columns: 1fr; }
-      nav { align-items: flex-start; flex-direction: column; padding: 18px 0; }
-      .links { gap: 12px; }
+    @media (max-width: 920px) {
+      .hero, .workspace { grid-template-columns: 1fr; }
+      .chat-card { max-width: 720px; }
+      .nav-links { display: none; }
+      .cards { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      .bubble { max-width: 88%; }
+    }
+    @media (max-width: 560px) {
+      .page { width: min(100% - 22px, 1160px); }
+      .hero-actions .btn { width: 100%; }
+      .input-row { grid-template-columns: 1fr; }
+      .send { min-height: 46px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <nav class="page">
-      <a class="brand" href="#">
-        <span class="logo">T</span>
-        <span>Tukuk</span>
+    <nav class="page" aria-label="Navigasi utama">
+      <a class="brand" href="#top" aria-label="Tukuk AI Studio">
+        <span class="logo">AI</span>
+        <span>Tukuk AI Studio</span>
       </a>
-      <div class="links">
-        <a href="#status">Status</a>
-        <a href="#website">Website</a>
-        <a href="#mail">Work Mail</a>
-        <a href="#dns">DNS</a>
-        <a href="#todo">Yang Perlu Setup</a>
+      <div class="nav-links">
+        <a href="#chat">AI Chat</a>
+        <a href="#features">Ciri</a>
+        <a href="#roadmap">Pelankan</a>
       </div>
     </nav>
   </header>
 
+  <div class="page hero" id="top">
+    <div>
+      <div class="eyebrow">Projek AI web percuma untuk GitHub Pages</div>
+      <h1>Bina, uji, dan tunjuk <span class="gradient-text">idea AI</span> dalam satu web app</h1>
+      <p class="hero-copy">
+        Laman ini adalah permulaan projek AI untuk Tukuk: chat assistant, generator idea,
+        pelan projek, dan panel dokumentasi ringkas. Semua berjalan sebagai fail statik
+        supaya boleh dihoskan percuma di GitHub Pages.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#chat">Cuba AI chat</a>
+        <a class="btn btn-secondary" href="#roadmap">Lihat pelan projek</a>
+      </div>
+      <div class="metrics" aria-label="Ringkasan projek">
+        <div class="metric"><strong>RM0</strong><span>Kos hosting</span></div>
+        <div class="metric"><strong>Static</strong><span>Tanpa backend</span></div>
+        <div class="metric"><strong>Pages</strong><span>Siap deploy</span></div>
+      </div>
+    </div>
+
+    <aside class="chat-card" id="chat" aria-label="AI chat demo">
+      <div class="chat-top">
+        <div>
+          <strong>Tukuk Assistant</strong>
+          <span>Client-side AI demo</span>
+        </div>
+        <span class="status">Online</span>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="composer">
+        <div class="input-row">
+          <textarea id="promptInput" rows="2" placeholder="Tanya idea projek AI, struktur fail, atau cara deploy..."></textarea>
+          <button class="send" id="sendButton" type="button">Hantar</button>
+        </div>
+        <div class="quick" aria-label="Cadangan soalan">
+          <button type="button">Idea projek AI</button>
+          <button type="button">Struktur fail</button>
+          <button type="button">Deploy GitHub Pages</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
   <main class="page">
-    <section class="hero">
-      <div>
-        <span class="eyebrow"><span class="dot"></span> Dashboard infrastruktur percuma</span>
-        <h1>Website dan work mail untuk <span class="gradient">Tukuk</span></h1>
-        <p class="lead">
-          Dashboard ini menyimpan status sebenar domain, website, subdomain, work mail, DNS,
-          dan perkara yang masih perlu disiapkan.
-        </p>
-        <div class="actions">
-          <a class="button primary" href="mailto:admin@tukuk.duckdns.org">Email admin</a>
-          <a class="button" href="#todo">Lihat checklist</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <strong>Status ringkas</strong>
-        <div class="terminal">
-          <div class="bar"><span></span><span></span><span></span></div>
-          <pre><code>Domain : tukuk.duckdns.org
-IP     : 103.186.160.191
-Site   : GitHub Pages built
-Mail   : pending Cloudflare setup
-MX     : not ready
-SPF    : empty</code></pre>
-        </div>
-      </div>
-    </section>
-
-    <section id="status">
-      <h2 class="section-title">Status infrastruktur</h2>
-      <div class="grid">
-        <article class="feature">
-          <strong><span class="badge ok">OK</span> DuckDNS</strong>
-          <p><code>tukuk.duckdns.org</code> sudah mengarah ke <code>103.186.160.191</code>.</p>
+    <section id="features">
+      <h2 class="section-title">Ciri projek</h2>
+      <p class="section-copy">
+        Projek ini sesuai untuk portfolio, demo AI, laman peribadi, atau asas web app yang lebih besar.
+        Tiada database diperlukan untuk versi percuma ini.
+      </p>
+      <div class="cards">
+        <article class="card">
+          <h3>AI chat demo</h3>
+          <p>Antaramuka chat moden dengan respons berasaskan kata kunci untuk demo pantas.</p>
         </article>
-        <article class="feature">
-          <strong><span class="badge ok">OK</span> Website</strong>
-          <p>GitHub Pages aktif di <code>https://tukuk.github.io/tukuk-website/</code>.</p>
+        <article class="card">
+          <h3>Generator idea</h3>
+          <p>Bantu susun idea projek AI, ciri MVP, dan langkah seterusnya tanpa server.</p>
         </article>
-        <article class="feature">
-          <strong><span class="badge warn">Pending</span> Work Mail</strong>
-          <p>Perlu aktifkan Cloudflare Email Routing dan verify email destinasi.</p>
+        <article class="card">
+          <h3>GitHub Pages ready</h3>
+          <p>Hanya fail statik. Push ke branch Pages dan laman terus boleh diakses.</p>
         </article>
       </div>
     </section>
 
-    <section id="website" class="split">
-      <div class="panel">
-        <h3>Website</h3>
-        <p>
-          Website statik sudah dibuat dan deploy ke GitHub Pages. Ia sentiasa hidup 24/7
-          tanpa perlu buka laptop.
-        </p>
-        <ul>
-          <li>Repo: <code>tukuk/tukuk-website</code></li>
-          <li>Pages: <code>https://tukuk.github.io/tukuk-website/</code></li>
-          <li>Status: <code>HTTP 200</code></li>
-        </ul>
-      </div>
-      <div class="panel">
-        <h3>Subdomain DNS</h3>
-        <p>Semua subdomain ini sudah DNS ke IP:</p>
-        <div class="status">
-          <div class="status-row"><div><strong><code>www.tukuk.duckdns.org</code></strong><span>Website alias</span></div><span class="badge ok">OK</span></div>
-          <div class="status-row"><div><strong><code>mail.tukuk.duckdns.org</code></strong><span>Work mail guide</span></div><span class="badge warn">DNS only</span></div>
-          <div class="status-row"><div><strong><code>app.tukuk.duckdns.org</code></strong><span>App masa depan</span></div><span class="badge warn">DNS only</span></div>
-          <div class="status-row"><div><strong><code>api.tukuk.duckdns.org</code></strong><span>API masa depan</span></div><span class="badge warn">DNS only</span></div>
-          <div class="status-row"><div><strong><code>status.tukuk.duckdns.org</code></strong><span>Status page</span></div><span class="badge warn">DNS only</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="mail">
-      <h2 class="section-title">Work Mail</h2>
-      <div class="split">
+    <section id="roadmap">
+      <h2 class="section-title">Pelankan projek</h2>
+      <p class="section-copy">
+        Gunakan pelan ini untuk kembangkan projek dari demo statik kepada web AI sebenar.
+      </p>
+      <div class="workspace">
         <div class="panel">
-          <h3>200 alamat email sudah disediakan</h3>
-          <p>
-            Senarai 200 alamat email sudah dibuat. Selepas Cloudflare setup, semua alamat
-            boleh forward ke Gmail/Outlook anda.
-          </p>
-          <ul>
-            <li><code>admin@tukuk.duckdns.org</code></li>
-            <li><code>support@tukuk.duckdns.org</code></li>
-            <li><code>work@tukuk.duckdns.org</code></li>
-            <li><code>sales@tukuk.duckdns.org</code></li>
-            <li><code>hello@tukuk.duckdns.org</code></li>
+          <h3>Roadmap ringkas</h3>
+          <ul class="todo">
+            <li><b>1.</b> Tambah halaman baharu seperti portfolio, dokumentasi, dan galeri demo.</li>
+            <li><b>2.</b> Sambung API AI melalui Cloudflare Worker atau backend kecil supaya API key tidak terdedah.</li>
+            <li><b>3.</b> Simpan sejarah chat dalam localStorage untuk pengalaman lebih baik.</li>
+            <li><b>4.</b> Tambah tema terang/gelap, carian, dan halaman admin ringkas.</li>
           </ul>
         </div>
         <div class="panel">
-          <h3>Password</h3>
-          <p>
-            Tiada password baru untuk email domain. Cloudflare hanya forward email ke destinasi
-            Gmail/Outlook anda.
-          </p>
-          <p>
-            Jika mahu reply/send dari email domain melalui Gmail, gunakan
-            <code>Gmail App Password</code>.
-          </p>
+          <h3>Struktur fail cadangan</h3>
+          <pre class="code">tukuk-website/
+  index.html
+  assets/
+    app.js
+    style.css
+  docs/
+    roadmap.html
+  CNAME</pre>
         </div>
       </div>
     </section>
 
-    <section id="dns">
-      <h2 class="section-title">DNS semasa</h2>
-      <div class="panel">
-        <h3>Yang sudah betul</h3>
-        <pre><code>A @      103.186.160.191
-A www    103.186.160.191
-A mail   103.186.160.191
-A app    103.186.160.191
-A api    103.186.160.191
-A status 103.186.160.191</code></pre>
-
-        <h3>Yang belum sesuai untuk Cloudflare Email Routing</h3>
-        <pre><code>MX semasa: 50 tukuk.duckdns.org.
-TXT SPF: kosong</code></pre>
-
-        <h3>MX yang perlu</h3>
-        <pre><code>MX @ route1.mx.cloudflare.net
-MX @ route2.mx.cloudflare.net
-MX @ route3.mx.cloudflare.net
-TXT @ v=spf1 include:_spf.mx.cloudflare.net ~all</code></pre>
-      </div>
-    </section>
-
-    <section id="todo">
-      <h2 class="section-title">Checklist untuk siap penuh</h2>
-      <div class="grid">
-        <article class="feature">
-          <strong>1. Cloudflare DNS</strong>
-          <p>Masukkan domain <code>tukuk.duckdns.org</code> ke Cloudflare dan guna nameserver Cloudflare.</p>
-        </article>
-        <article class="feature">
-          <strong>2. Email Routing</strong>
-          <p>Aktifkan Email Routing dan verify destination email Gmail/Outlook anda.</p>
-        </article>
-        <article class="feature">
-          <strong>3. Catch-all rule</strong>
-          <p>Buat rule: <code>* @ tukuk.duckdns.org → email-gmail-anda@gmail.com</code>.</p>
-        </article>
-        <article class="feature">
-          <strong>4. Gmail App Password</strong>
-          <p>Buat App Password untuk SMTP Gmail jika mahu reply/send sebagai email domain.</p>
-        </article>
-        <article class="feature">
-          <strong>5. Cloudflare Pages</strong>
-          <p>Untuk subdomain seperti <code>mail</code>, <code>app</code>, <code>api</code>, gunakan Cloudflare Pages.</p>
-        </article>
-        <article class="feature">
-          <strong>6. Test email</strong>
-          <p>Hantar email ujian ke <code>admin@tukuk.duckdns.org</code>.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="contact" class="panel">
-      <h3>Kontak</h3>
-      <p>Email utama selepas setup:</p>
-      <pre><code>admin@tukuk.duckdns.org</code></pre>
-      <p>Domain:</p>
-      <pre><code>tukuk.duckdns.org</code></pre>
+    <section id="privacy">
+      <h2 class="section-title">Privasi</h2>
+      <p class="section-copy">
+        Versi ini tidak menghantar mesej ke server luar. Jika mahu sambung ke model AI sebenar,
+        gunakan API key anda sendiri dan jangan letakkan rahsia dalam JavaScript browser.
+      </p>
     </section>
   </main>
 
   <footer class="page">
-    © 2026 Tukuk. Built with free always-on hosting.
+    <span>© <span id="year"></span> Tukuk AI Studio</span>
+    <span>Dibina untuk GitHub Pages</span>
   </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const messages = document.getElementById('messages');
+    const promptInput = document.getElementById('promptInput');
+    const sendButton = document.getElementById('sendButton');
+    const toast = document.getElementById('toast');
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const responses = {
+      idea: 'Cadangan projek AI: assistant peribadi untuk idea web, portfolio automatik, chatbot khidmat pelanggan, generator caption, atau dashboard ringkasan dokumen. Mulakan dengan MVP satu halaman.',
+      struktur: 'Struktur cadangan: index.html untuk UI utama, assets/app.js untuk logik chat, assets/style.css untuk reka bentuk, docs/roadmap.html untuk dokumentasi, dan CNAME jika guna domain custom.',
+      deploy: 'Untuk GitHub Pages, buka Settings > Pages, pilih branch gh-pages atau main ikut konfigurasi repo, kemudian tunggu URL aktif. Pastikan fail utama bernama index.html.',
+      api: 'Untuk AI sebenar, jangan letak API key dalam browser. Buat Cloudflare Worker atau backend kecil, panggil model AI di sana, lalu sambungkan web statik ke endpoint itu.',
+      default: 'Saya faham. Untuk projek ini, kita boleh mulakan dengan chat demo, halaman ciri, pelan projek, dan hosting percuma di GitHub Pages.'
+    };
+
+    const greetings = [
+      'Hai! Saya Tukuk Assistant. Apa yang anda mahu bina hari ini?',
+      'Boleh. Tanya idea AI, struktur fail, atau cara deploy GitHub Pages.',
+      'Saya sedia bantu susun projek web AI percuma ini.'
+    ];
+
+    function addMessage(text, role) {
+      const item = document.createElement('div');
+      item.className = `message ${role}`;
+
+      const avatar = document.createElement('div');
+      avatar.className = `avatar ${role}`;
+      avatar.textContent = role === 'user' ? 'Anda' : 'AI';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+
+      item.append(avatar, bubble);
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function generateResponse(prompt) {
+      const lower = prompt.toLowerCase();
+      if (lower.includes('idea') || lower.includes('projek')) return responses.idea;
+      if (lower.includes('struktur') || lower.includes('fail')) return responses.struktur;
+      if (lower.includes('deploy') || lower.includes('github') || lower.includes('pages')) return responses.deploy;
+      if (lower.includes('api') || lower.includes('model')) return responses.api;
+      return responses.default;
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function sendPrompt() {
+      const text = promptInput.value.trim();
+      if (!text) return;
+
+      addMessage(text, 'user');
+      promptInput.value = '';
+      promptInput.style.height = 'auto';
+      sendButton.disabled = true;
+
+      window.setTimeout(() => {
+        addMessage(generateResponse(text), 'ai');
+        sendButton.disabled = false;
+        promptInput.focus();
+      }, 520);
+    }
+
+    sendButton.addEventListener('click', sendPrompt);
+
+    promptInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendPrompt();
+      }
+    });
+
+    promptInput.addEventListener('input', () => {
+      promptInput.style.height = 'auto';
+      promptInput.style.height = `${promptInput.scrollHeight}px`;
+    });
+
+    document.querySelectorAll('.quick button').forEach((button) => {
+      button.addEventListener('click', () => {
+        promptInput.value = button.textContent;
+        promptInput.focus();
+        showToast('Soalan cadangan dimasukkan');
+      });
+    });
+
+    addMessage(greetings[Math.floor(Math.random() * greetings.length)], 'ai');
+  </script>
 </body>
 </html>
